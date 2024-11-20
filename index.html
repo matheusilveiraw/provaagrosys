@@ -6,16 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
 
-    <!-- Boostrap -->
+    <!-- Bootstrap -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
     <div class="container vh-100 d-flex align-items-center">
         <div class="row w-100 mx-0">
+            
             <!-- LOGIN -->
-            <div class="col-md-6 mb-4 px-2">
-                <div class="p-5 bg-white rounded shadow">
+            <div class="col-md-6 mb-4 px-2 d-flex align-items-center justify-content-center flex-column">
+                <div class="p-5 bg-white rounded shadow w-100">
                     <h2 class="text-center mb-4">Login</h2>
                     <input type="text" class="form-control mb-3" placeholder="Usuário">
                     <input type="password" class="form-control mb-3" placeholder="Senha">
@@ -26,12 +27,23 @@
             </div>
 
             <!-- CADASTRO -->
-            <div class="col-md-6 mb-4 px-2">
-                <div class="p-5 bg-white rounded shadow">
+            <div class="col-md-6 mt-5 mb-4 px-2">
+                <div class="p-5 bg-white rounded shadow w-100">
                     <h2 class="text-center mb-4">Cadastro</h2>
-                    <input type="text" class="form-control mb-3" placeholder="Nome">
-                    <input type="email" class="form-control mb-3" placeholder="Email">
+                    <input type="text" class="form-control mb-3" placeholder="Usuário">
                     <input type="password" class="form-control mb-3" placeholder="Senha">
+                    <input type="password" class="form-control mb-3" placeholder="Confirme a senha">
+                    <input type="number" class="form-control mb-3" name="cpf" id="cpf" placeholder="CPF">
+                    <input type="date" class="form-control mb-3" name="data_nascimento" id="data_nascimento" placeholder="Data de nascimento">
+                    <input type="number" class="form-control mb-3" name="telefone" id="telefone" placeholder="Telefone">
+                    <input type="number" class="form-control mb-3" name="celular" id="celular" placeholder="Celular">
+                    <input type="number" class="form-control mb-3" name="cep" id="cep" placeholder="CEP">
+                    <input type="text" class="form-control mb-3" name="rua" id="rua" placeholder="Rua">
+                    <input type="text" class="form-control mb-3" name="bairro" id="bairro" placeholder="Bairro">
+                    <input type="text" class="form-control mb-3" name="cidade" id="cidade" placeholder="Cidade">
+                    <input type="text" class="form-control mb-3" name="estado" id="estado" placeholder="Estado">
+                    <input type="text" class="form-control mb-3" name="pais" id="pais" placeholder="País">
+
                     <div class="text-center">
                         <button type="button" class="btn btn-success btn-lg w-100">Cadastrar</button>
                     </div>
@@ -40,7 +52,5 @@
         </div>
     </div>
 </body>
-
-
 
 </html>
