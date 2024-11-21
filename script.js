@@ -15,7 +15,9 @@ function validarDadosParaCadastro() {
     validarConfirmaSenhaCadastro();
     validarNomeCompleto();
     validarCPF();
-    validarDataNascimento()
+    validarDataNascimento();
+    validarTelefone();
+
 
     console.log(dataNascimento);
 
@@ -177,16 +179,20 @@ function validarDataNascimento() {
 } 
 
 function validarTelefone() {
-    let dataNascimento = document.getElementById('dataNascimento').value;
-    let errosDataNascimento = [];
+    let telefone = document.getElementById('telefone').value;
+    let errosTelefone = [];
+    const apenasNumeros = /[^0-9 ]/g; 
 
-    document.getElementById('errosDataNascimento').innerHTML = "";
+    document.getElementById('errosTelefone').innerHTML = "";
 
-    if (dataNascimento === "") {
-        errosDataNascimento.push("É necessário preencher dia, mês e ano!");
+    if (telefone === "") {
+        errosTelefone.push("O campo telefone é obrigátorio");
     }
 
-    if (errosDataNascimento.length > 0) {
-        document.getElementById('errosDataNascimento').innerHTML = errosDataNascimento.join("<br>");
+    if (telefone.match(apenasNumeros)) {
+        errosCpf.push("Não é permitido caracteres especiais e letras no campo telefone.");
+    }
+    if (errosTelefone.length > 0) {
+        document.getElementById('errosTelefone').innerHTML = errosTelefone.join("<br>");
     }
 } 
