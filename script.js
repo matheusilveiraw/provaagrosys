@@ -1,27 +1,59 @@
-function validarDadosParaCadastro() {
-    validarUsuarioCadastro();
-    validarSenhaCadastro();
-    validarConfirmaSenhaCadastro();
-    validarNomeCompleto();
-    validarCPF();
-    validarDataNascimento();
-    validarTelefone();
-    validarCelular();
-    validarCep();
-    validarRua();
-    validarBairro();
-    validarCidade();
-    validarEstado();
-    validarPais();
+alasql('CREATE LOCALSTORAGE DATABASE IF NOT EXISTS argosqldb');
+alasql('ATTACH LOCALSTORAGE DATABASE argosqldb AS argosql');
+alasql('USE argosql');
+alasql("CREATE TABLE IF NOT EXISTS cadastros_usuarios (nome_usuario STRING, senha STRING)");
 
+if (alasql.tables.cadastros_usuarios) {
+    alasql("SELECT * FROM cadastros_usuarios");
+}
+
+
+function logar() { 
+    
+}
+
+function validarDadosParaCadastro() {
+    let erros = 0;
+
+    erros += validarUsuarioCadastro();
+    erros += validarSenhaCadastro();
+    erros += validarConfirmaSenhaCadastro();
+    console.log('erros = ' + erros);
+
+    if (erros === 0) { 
+        cadastrarUsuario();
+    }
+}
+
+function cadastrarUsuario() {
+    let usuario = document.getElementById('usuario').value;
+    let senha = document.getElementById('senha').value;
+
+    if (alasql.tables.cadastros_usuarios) {
+        alasql("INSERT INTO cadastros_usuarios VALUES (?, ?)", [usuario, senha]);
+
+        console.log(alasql.tables.cadastros_usuarios.data); 
+
+        alert('Cadastro realizado com sucesso!');
+    } else {
+        console.error("Tabela 'cadastros_usuarios' não encontrada");
+    }
 }
 
 function validarUsuarioCadastro() {
     let usuario = document.getElementById('usuario').value;
     let errosUsuario = [];
     const caracteresEspeciais = /[^a-zA-Z0-9 ]/g; //para verificar se tem caracteres especiais
+    const buscaUsuarioBD = alasql("SELECT * FROM cadastros_usuarios WHERE nome_usuario = ?", [usuario]);
 
     document.getElementById('errosUsuario').innerHTML = "";
+
+    if (buscaUsuarioBD.length === 0) {
+        console.log("O usuário não foi encontrado no banco de dados.");
+    } else {
+        console.log();
+        errosUsuario.push("Esse usuário já está sendo usado!");
+    }
 
     if (usuario === "") {
         errosUsuario.push("O campo Usuário é obrigatório.");
@@ -33,7 +65,10 @@ function validarUsuarioCadastro() {
 
     if (errosUsuario.length > 0) {
         document.getElementById('errosUsuario').innerHTML = errosUsuario.join("<br>");
+        return 1;
     }
+    
+    return 0;
 } 
 
 function validarSenhaCadastro() {
@@ -48,7 +83,9 @@ function validarSenhaCadastro() {
 
     if (errosSenha.length > 0) {
         document.getElementById('errosSenha').innerHTML = errosSenha.join("<br>");
+        return 1;
     } 
+    return 0;
 } 
 
 function validarConfirmaSenhaCadastro() {
@@ -59,13 +96,19 @@ function validarConfirmaSenhaCadastro() {
 
     document.getElementById('errosConfirmaSenha').innerHTML = "";
 
+    if(confirmaSenha == "") { 
+        errosConfirmaSenha.push("Esse campo deve ser preenchido!");
+    }
+
     if (senha != confirmaSenha) {
         errosConfirmaSenha.push("As senhas são diferentes!");
     }
 
     if (errosConfirmaSenha.length > 0) {
         document.getElementById('errosConfirmaSenha').innerHTML = errosConfirmaSenha.join("<br>");
+        return 1;
     } 
+    return 0;
 } 
 
 function validarNomeCompleto() {

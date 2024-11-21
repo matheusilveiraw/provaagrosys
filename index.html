@@ -20,32 +20,16 @@
                 <input type="text" class="form-control mb-3" placeholder="Usuário">
                 <input type="password" class="form-control mb-3" placeholder="Senha">
                 <div class="text-center">
-                    <button type="button" class="btn btn-primary btn-lg w-100">Login</button>
+                    <button type="button" class="btn btn-primary btn-lg w-100" onClick="logar()">Login</button>
                     <a href="cadastro.html" class="text-center">Não tem cadastro? Cadastre-se</a>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/alasql@latest"></script>
+
     <script src="script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/alasql/dist/alasql.min.js"></script>
-    <script>
-
-
-        //EXEMPLO DO WIKI DO ALASQL 
-        // alasql("CREATE TABLE cities (city string, population number)");
-
-        // alasql("INSERT INTO cities VALUES ('Rome',2863223), ('Paris',2249975), ('Berlin',3517424),  ('Madrid',3041579)");
-
-        // var res = alasql("SELECT * FROM cities WHERE population < 3500000 ORDER BY population DESC");
-
-        // console.log(res);
-
-        // res now contains this array of object:
-        // [{"city":"Madrid","population":3041579},{"city":"Rome","population":2863223},{"city":"Paris","population":2249975}] 	
-
-
-    </script>
 </body>
 
 </html>
