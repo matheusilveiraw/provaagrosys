@@ -18,53 +18,8 @@ function validarDadosParaCadastro() {
     validarTelefone();
     validarCelular();
     validarCep();
+    validarRua();
 
-
-    console.log(dataNascimento);
-
-    // if (senha === "") {
-    //     erros.push("O campo Senha é obrigatório.");
-    // } else if (senha !== confirmeSenha) {
-    //     erros.push("As senhas não coincidem.");
-    // }
-
-    // if (cpf === "") {
-    //     erros.push("O campo CPF é obrigatório.");
-    // }
-
-    // if (telefone === "") {
-    //     erros.push("O campo Telefone é obrigatório.");
-    // }
-
-    // if (celular === "") {
-    //     erros.push("O campo Celular é obrigatório.");
-    // }
-
-    // if (cep === "") {
-    //     erros.push("O campo CEP é obrigatório.");
-    // }
-
-    // if (rua === "") {
-    //     erros.push("O campo Rua é obrigatório.");
-    // }
-
-    // if (bairro === "") {
-    //     erros.push("O campo Bairro é obrigatório.");
-    // }
-
-    // if (cidade === "") {
-    //     erros.push("O campo Cidade é obrigatório.");
-    // }
-
-    // if (estado === "") {
-    //     erros.push("O campo Estado é obrigatório.");
-    // }
-
-    // if (pais === "") {
-    //     erros.push("O campo País é obrigatório.");
-    // }
-
-    // Exibir erros na tela
 
 }
 
@@ -253,3 +208,19 @@ function validarCep() {
         document.getElementById('errosCep').innerHTML = errosCep.join("<br>");
     }
 } 
+
+function validarRua() {
+    let rua = document.getElementById('rua').value;
+    let errosRua = [];
+
+    document.getElementById('errosRua').innerHTML = "";
+
+    if (rua === "") {
+        errosRua.push("O campo rua é obrigatório.");
+    }
+
+    if (errosRua.length > 0) {
+        document.getElementById('errosRua').innerHTML = errosRua.join("<br>");
+    }
+} 
+
