@@ -1,6 +1,5 @@
 function validarDadosParaCadastro() {
     // Coletando os valores dos inputs
-    let cpf = document.getElementById('cpf').value;
     let dataNascimento = document.getElementById('dataNascimento').value;
     let telefone = document.getElementById('telefone').value;
     let celular = document.getElementById('celular').value;
@@ -15,6 +14,7 @@ function validarDadosParaCadastro() {
     validarSenhaCadastro();
     validarConfirmaSenhaCadastro();
     validarNomeCompleto();
+    validarCPF();
 
     // if (senha === "") {
     //     erros.push("O campo Senha é obrigatório.");
@@ -126,10 +126,34 @@ function validarNomeCompleto() {
     }
 
     if (nomeCompleto.match(apenasLetras)) {
-    
         errosNomeCompleto.push("Não é permitido caracteres especiais e números no campo nome completo.");
     }
+
     if (errosNomeCompleto.length > 0) {
         document.getElementById('errosNomeCompleto').innerHTML = errosNomeCompleto.join("<br>");
+    }
+} 
+
+function validarCPF() {
+    let cpf = document.getElementById('cpf').value;
+    let errosCpf = [];
+    const apenasNumeros = /[^0-9 ]/g; 
+
+    document.getElementById('errosCpf').innerHTML = "";
+
+    if (cpf === "") {
+        errosCpf.push("O campo CPF é obrigatório.");
+    }
+
+    if (cpf.match(apenasNumeros)) {
+        errosCpf.push("Não é permitido caracteres especiais e letras no campo CPF.");
+    }
+
+    if (cpf.length != 11) {
+        errosCpf.push("CPF deve ter 11 caracteres!");
+    }
+
+    if (errosCpf.length > 0) {
+        document.getElementById('errosCpf').innerHTML = errosCpf.join("<br>");
     }
 } 
