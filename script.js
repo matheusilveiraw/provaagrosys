@@ -1,6 +1,6 @@
 function validarDadosParaCadastro() {
     // Coletando os valores dos inputs
-    let dataNascimento = document.getElementById('dataNascimento').value;
+
     let telefone = document.getElementById('telefone').value;
     let celular = document.getElementById('celular').value;
     let cep = document.getElementById('cep').value;
@@ -15,6 +15,9 @@ function validarDadosParaCadastro() {
     validarConfirmaSenhaCadastro();
     validarNomeCompleto();
     validarCPF();
+    validarDataNascimento()
+
+    console.log(dataNascimento);
 
     // if (senha === "") {
     //     erros.push("O campo Senha é obrigatório.");
@@ -155,5 +158,35 @@ function validarCPF() {
 
     if (errosCpf.length > 0) {
         document.getElementById('errosCpf').innerHTML = errosCpf.join("<br>");
+    }
+} 
+
+function validarDataNascimento() {
+    let dataNascimento = document.getElementById('dataNascimento').value;
+    let errosDataNascimento = [];
+
+    document.getElementById('errosDataNascimento').innerHTML = "";
+
+    if (dataNascimento === "") {
+        errosDataNascimento.push("É necessário preencher dia, mês e ano!");
+    }
+
+    if (errosDataNascimento.length > 0) {
+        document.getElementById('errosDataNascimento').innerHTML = errosDataNascimento.join("<br>");
+    }
+} 
+
+function validarTelefone() {
+    let dataNascimento = document.getElementById('dataNascimento').value;
+    let errosDataNascimento = [];
+
+    document.getElementById('errosDataNascimento').innerHTML = "";
+
+    if (dataNascimento === "") {
+        errosDataNascimento.push("É necessário preencher dia, mês e ano!");
+    }
+
+    if (errosDataNascimento.length > 0) {
+        document.getElementById('errosDataNascimento').innerHTML = errosDataNascimento.join("<br>");
     }
 } 
