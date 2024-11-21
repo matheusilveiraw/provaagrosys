@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Agrosys</title>
+
+    <!-- Bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.php">Teste Agrosys</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="acesso_sistema.html">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="clientes.html">Clientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="enderecos.html">Endereços</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Deslogar</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container text-center flex-grow-1 mt-5">
+        <div class="row">
+            <div class="col"> </div>
+            <div class="col-10">
+                <h1>Clientes</h1>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Sobrenome</th>
+                            <th scope="col">CPF</th>
+                            <th scope="col">Idade</th>
+                            <th scope="col">Editar</th>
+                            <th scope="col">Deletar</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <th scope="row"></th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <a class="btn btn-warning btn-sm"
+                                    href="editar_cliente.php?id=<?php echo $dados['id'] ?>.php" role="button"><i
+                                        data-feather="edit"></i></a>
+                            </td>
+                            <td>
+                                <a class="btn btn-danger btn-sm"
+                                    href="banco_de_dados/delete_cliente.php?id=<?php echo $dados['id'] ?>"
+                                    role="button"><i data-feather="trash-2"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+
+
+                    <tr>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                </table>
+
+                <div class="container text-center">
+                    <a class="btn btn-dark btn-lg col-sm-3 me-2" href="cadastrar_cliente.html" role="button">Cadastrar</a>
+                </div>
+            </div>
+            <div class=" col">
+                </div>
+            </div>
+        </div>
+
+
+        <footer class="footer py-3 bg-dark text-light">
+            <div class="container text-center">
+                <a class="btn btn-sm" href="https://github.com/matheusilveiraw"><i data-feather="github"></i></a>
+                @matheusilveiraw | matheus.silveiraw@gmail.com
+            </div>
+        </footer>
+
+        <!-- Ala SQL -->
+        <script src="https://cdn.jsdelivr.net/npm/alasql@latest"></script>
+
+        <!-- Bootstrap -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+        <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,17 +1,55 @@
 criarBanco();
 
 
+function cadastrarClienteBanco() { 
+
+}
+
+
+function validarDadosCliente() { 
+    erros = 0;
+
+    erros += validarNomeCompleto();
+    erros += validarCPF();
+    erros += validarDataNascimento();
+    erros += validarTelefone();
+    erros += validarCelular(); 
+
+    if(erros == 0) { 
+        console.log('tudo certo para o cadastro');
+    } else { 
+        console.log('corrija os erros');
+    }
+} 
 
 function criarBanco() { 
     alasql('CREATE LOCALSTORAGE DATABASE IF NOT EXISTS argosqldb');
     alasql('ATTACH LOCALSTORAGE DATABASE argosqldb AS argosql');
     alasql('USE argosql');
     alasql("CREATE TABLE IF NOT EXISTS cadastros_usuarios (nome_usuario STRING, senha STRING)");
+
     if (alasql.tables.cadastros_usuarios) {
         alasql("SELECT * FROM cadastros_usuarios");
     }
-}
 
+    alasql("CREATE TABLE IF NOT EXISTS cadastros_clientes (id INT, nome_completo STRING, senha STRING, data_nascimento DATE, telefone BIGINT, celular BIGINT, cpf BIGINT)");
+
+    if (alasql.tables.cadastros_clientes) {
+        alasql("SELECT * FROM cadastros_clientes");
+    }
+
+    alasql("CREATE TABLE IF NOT EXISTS cadastros_enderecos (id, number, cep number, rua STRING, bairro string, cidade string, estado string, estado string, pais string, cliente number)");
+
+    if (alasql.tables.cadastros_enderecos) {
+        alasql("SELECT * FROM cadastros_enderecos");
+    }
+
+    // alasql("INSERT INTO cadastros_clientes VALUES (?, ?, ?, ?, ?, ?, ?)", [1, "João Silva", "senha123", "1990-05-15", 1123456789, 11987654321, 12345678901]);
+    // alasql("INSERT INTO cadastros_clientes VALUES (?, ?, ?, ?, ?, ?, ?)", [2, "Maria Oliveira", "senha456", "1985-08-22", 2129876543, 21912345678, 23456789012]);
+    // alasql("INSERT INTO cadastros_clientes VALUES (?, ?, ?, ?, ?, ?, ?)", [3, "Carlos Souza", "senha789", "2000-01-10", 3139876543, 31987654321, 34567890123]);
+    // alasql("INSERT INTO cadastros_clientes VALUES (?, ?, ?, ?, ?, ?, ?)", [4, "Ana Santos", "senha321", "1995-12-25", 4187654321, 41912345678, 45678901234]);
+    
+}
 
 function logar() { 
     let usuario = document.getElementById('usuarioLogin').value;
@@ -161,15 +199,27 @@ function validarNomeCompleto() {
 
     if (errosNomeCompleto.length > 0) {
         document.getElementById('errosNomeCompleto').innerHTML = errosNomeCompleto.join("<br>");
+        return 1;
     }
+
+    return 0;
 } 
 
 function validarCPF() {
     let cpf = document.getElementById('cpf').value;
     let errosCpf = [];
     const apenasNumeros = /[^0-9 ]/g; 
+    const buscaCpfs = alasql("SELECT cpf FROM cadastros_clientes");
 
     document.getElementById('errosCpf').innerHTML = "";
+
+    for (let index = 0; index < buscaCpfs.length; index++) {
+        const element = buscaCpfs[index].cpf;
+
+        if(element == cpf) { 
+            errosCpf.push('Esse CPF já está cadastrado no sistema!');
+        }
+    }
 
     if (cpf === "") {
         errosCpf.push("O campo CPF é obrigatório.");
@@ -185,7 +235,10 @@ function validarCPF() {
 
     if (errosCpf.length > 0) {
         document.getElementById('errosCpf').innerHTML = errosCpf.join("<br>");
+        return 1;
     }
+
+    return 0;
 } 
 
 function validarDataNascimento() {
@@ -200,7 +253,10 @@ function validarDataNascimento() {
 
     if (errosDataNascimento.length > 0) {
         document.getElementById('errosDataNascimento').innerHTML = errosDataNascimento.join("<br>");
+        return 1;
     }
+
+    return 0;
 } 
 
 function validarTelefone() {
@@ -219,13 +275,16 @@ function validarTelefone() {
     }
 
     if (telefone.length != 8) {
-        errosTelefone.push("Telefone deve ter 11 caracteres!");
+        errosTelefone.push("Telefone deve ter 8 caracteres!");
     }
 
 
     if (errosTelefone.length > 0) {
-        document.getElementById('errosTelefone').innerHTML = errosTelefone.join("<br>");
+        document.getElementById('errosTelefone').innerHTML = errosTelefone.join("<br>"); 
+        return 1;
     }
+
+    return 0;
 } 
 
 function validarCelular() {
@@ -243,14 +302,17 @@ function validarCelular() {
         errosCpf.push("Não é permitido caracteres especiais e letras no campo celular.");
     }
 
-    if (celular.length != 8) {
-        errosCelular.push("Celular deve ter 11 caracteres!");
+    if (celular.length != 9) {
+        errosCelular.push("Celular deve ter 9 caracteres!");
     }
 
 
     if (errosCelular.length > 0) {
         document.getElementById('errosCelular').innerHTML = errosCelular.join("<br>");
+        return 1;
     }
+
+    return 0;
 } 
 
 function validarCep() {
