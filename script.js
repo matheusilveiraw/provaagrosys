@@ -1,13 +1,4 @@
 function validarDadosParaCadastro() {
-    // Coletando os valores dos inputs
-
-    let celular = document.getElementById('celular').value;
-    let cep = document.getElementById('cep').value;
-    let rua = document.getElementById('rua').value;
-    let bairro = document.getElementById('bairro').value;
-    let cidade = document.getElementById('cidade').value;
-    let estado = document.getElementById('estado').value;
-
     validarUsuarioCadastro();
     validarSenhaCadastro();
     validarConfirmaSenhaCadastro();
@@ -21,6 +12,7 @@ function validarDadosParaCadastro() {
     validarBairro();
     validarCidade();
     validarEstado();
+    validarPais();
 
 }
 
@@ -267,5 +259,20 @@ function validarEstado() {
 
     if (errosEstado.length > 0) {
         document.getElementById('errosEstado').innerHTML = errosEstado.join("<br>");
+    }
+} 
+
+function validarPais() {
+    let pais = document.getElementById('pais').value;
+    let errosPais = [];
+
+    document.getElementById('errosPais').innerHTML = "";
+
+    if (pais === "") {
+        errosPais.push("O campo pais é obrigatório.");
+    }
+
+    if (errosPais.length > 0) {
+        document.getElementById('errosPais').innerHTML = errosPais.join("<br>");
     }
 } 
