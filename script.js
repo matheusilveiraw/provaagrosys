@@ -20,7 +20,7 @@ function validarDadosParaCadastro() {
     validarRua();
     validarBairro();
     validarCidade();
-
+    validarEstado();
 
 }
 
@@ -252,5 +252,20 @@ function validarCidade() {
 
     if (errosCidade.length > 0) {
         document.getElementById('errosCidade').innerHTML = errosCidade.join("<br>");
+    }
+} 
+
+function validarEstado() {
+    let estado = document.getElementById('estado').value;
+    let errosEstado = [];
+
+    document.getElementById('errosEstado').innerHTML = "";
+
+    if (estado === "") {
+        errosEstado.push("O campo estado é obrigatório.");
+    }
+
+    if (errosEstado.length > 0) {
+        document.getElementById('errosEstado').innerHTML = errosEstado.join("<br>");
     }
 } 
