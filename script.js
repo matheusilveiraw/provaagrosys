@@ -19,6 +19,8 @@ function validarDadosParaCadastro() {
     validarCep();
     validarRua();
     validarBairro();
+    validarCidade();
+
 
 }
 
@@ -235,5 +237,20 @@ function validarBairro() {
 
     if (errosBairro.length > 0) {
         document.getElementById('errosBairro').innerHTML = errosBairro.join("<br>");
+    }
+} 
+
+function validarCidade() {
+    let cidade = document.getElementById('cidade').value;
+    let errosCidade = [];
+
+    document.getElementById('errosCidade').innerHTML = "";
+
+    if (cidade === "") {
+        errosCidade.push("O campo cidade é obrigatório.");
+    }
+
+    if (errosCidade.length > 0) {
+        document.getElementById('errosCidade').innerHTML = errosCidade.join("<br>");
     }
 } 
