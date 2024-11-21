@@ -10,11 +10,11 @@ function validarDadosParaCadastro() {
     let cidade = document.getElementById('cidade').value;
     let estado = document.getElementById('estado').value;
     let pais = document.getElementById('pais').value;
-    let nomeCompleto = document.getElementById('nomeCompleto').value;
 
     validarUsuarioCadastro();
     validarSenhaCadastro();
     validarConfirmaSenhaCadastro();
+    validarNomeCompleto();
 
     // if (senha === "") {
     //     erros.push("O campo Senha é obrigatório.");
@@ -97,7 +97,7 @@ function validarSenhaCadastro() {
     } 
 } 
 
-function validarSenhaCadastro() {
+function validarConfirmaSenhaCadastro() {
     let senha = document.getElementById('senha').value;
     let confirmaSenha = document.getElementById('confirmaSenha').value;
 
@@ -112,4 +112,24 @@ function validarSenhaCadastro() {
     if (errosConfirmaSenha.length > 0) {
         document.getElementById('errosConfirmaSenha').innerHTML = errosConfirmaSenha.join("<br>");
     } 
+} 
+
+function validarNomeCompleto() {
+    let nomeCompleto = document.getElementById('nomeCompleto').value;
+    let errosNomeCompleto = [];
+    const apenasLetras = /[^a-zA-Z ]/g;
+
+    document.getElementById('errosNomeCompleto').innerHTML = "";
+
+    if (nomeCompleto === "") {
+        errosNomeCompleto.push("O campo nome completo é obrigatório.");
+    }
+
+    if (nomeCompleto.match(apenasLetras)) {
+    
+        errosNomeCompleto.push("Não é permitido caracteres especiais e números no campo nome completo.");
+    }
+    if (errosNomeCompleto.length > 0) {
+        document.getElementById('errosNomeCompleto').innerHTML = errosNomeCompleto.join("<br>");
+    }
 } 
