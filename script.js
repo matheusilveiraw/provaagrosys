@@ -7,7 +7,6 @@ function validarDadosParaCadastro() {
     let bairro = document.getElementById('bairro').value;
     let cidade = document.getElementById('cidade').value;
     let estado = document.getElementById('estado').value;
-    let pais = document.getElementById('pais').value;
 
     validarUsuarioCadastro();
     validarSenhaCadastro();
@@ -19,7 +18,7 @@ function validarDadosParaCadastro() {
     validarCelular();
     validarCep();
     validarRua();
-
+    validarBairro();
 
 }
 
@@ -224,3 +223,17 @@ function validarRua() {
     }
 } 
 
+function validarBairro() {
+    let bairro = document.getElementById('bairro').value;
+    let errosBairro = [];
+
+    document.getElementById('errosBairro').innerHTML = "";
+
+    if (bairro === "") {
+        errosBairro.push("O campo bairro é obrigatório.");
+    }
+
+    if (errosBairro.length > 0) {
+        document.getElementById('errosBairro').innerHTML = errosBairro.join("<br>");
+    }
+} 
