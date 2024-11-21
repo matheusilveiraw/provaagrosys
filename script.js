@@ -9,7 +9,35 @@ if (alasql.tables.cadastros_usuarios) {
 
 
 function logar() { 
-    
+    let usuario = document.getElementById('usuarioLogin').value;
+    let senha = document.getElementById('senhaLogin').value;
+    errosSenha = [];
+    errosUsuario = [];
+
+    if(usuario == "") { 
+        errosUsuario.push("O campo usuário é obrigatório.");
+    }
+
+    if(senha == "") { 
+        errosSenha.push("O campo senha é obrigatório.");
+    }
+
+    let buscaUsuarioBD = alasql("SELECT nome_usuario FROM cadastros_usuarios WHERE nome_usuario = ?", [usuario]);
+
+    if(buscaUsuarioBD.length > 0) { 
+        if(alasql("SELECT senha FROM cadastros_usuarios WHERE nome_usuario = ?", [usuario])[0].senha == senha) { 
+            window.location.href = "acesso_sistema.html";
+        } else {
+            errosSenha.push("A senha está incorreta!");
+        }
+    } else { 
+        errosUsuario.push("A senha está incorreta!");
+    }
+
+    if(errosSenha.length + errosUsuario.length != 0) {
+        document.getElementById('erroUsuarioLogin').innerHTML = errosUsuario.join("<br>");
+        document.getElementById('erroUsuarioSenha').innerHTML = errosSenha.join("<br>");
+    }
 }
 
 function validarDadosParaCadastro() {
