@@ -1,10 +1,15 @@
-alasql('CREATE LOCALSTORAGE DATABASE IF NOT EXISTS argosqldb');
-alasql('ATTACH LOCALSTORAGE DATABASE argosqldb AS argosql');
-alasql('USE argosql');
-alasql("CREATE TABLE IF NOT EXISTS cadastros_usuarios (nome_usuario STRING, senha STRING)");
+criarBanco();
 
-if (alasql.tables.cadastros_usuarios) {
-    alasql("SELECT * FROM cadastros_usuarios");
+
+
+function criarBanco() { 
+    alasql('CREATE LOCALSTORAGE DATABASE IF NOT EXISTS argosqldb');
+    alasql('ATTACH LOCALSTORAGE DATABASE argosqldb AS argosql');
+    alasql('USE argosql');
+    alasql("CREATE TABLE IF NOT EXISTS cadastros_usuarios (nome_usuario STRING, senha STRING)");
+    if (alasql.tables.cadastros_usuarios) {
+        alasql("SELECT * FROM cadastros_usuarios");
+    }
 }
 
 

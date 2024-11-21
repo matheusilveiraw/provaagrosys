@@ -1,28 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Teste - Agrosys</title>
 
     <!-- Bootstrap -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- para icones -->
+    <script src="https://unpkg.com/feather-icons"></script>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
-    <div class="d-flex justify-content-center align-items-center vh-100">
-        <div class="col-md-6 mb-4 px-2 d-flex align-items-center justify-content-center flex-column">
-            <div class="p-5 bg-white rounded shadow w-100">
+<body class="d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.php">Teste Agrosys</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="acesso_sistema.html">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="clientes.html">Clientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="enderecos.html">Produtos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Deslogar</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
+    <div class="grid text-center mt-5 flex-grow-1">
+        <div class="col-12">
+            <div class="container mt-4">
+                <h1>Bem-vindo</h1>
+                <p>Esse projeto foi feito exclusivamente para o processo seletivo da Agrosys, fique a vontade para
+                    navegar nele!</p>
+                <p>Utilize a barra de navegação acima para explorar o site.</p>
             </div>
         </div>
     </div>
 
+    <footer class="footer py-3 bg-dark text-light">
+        <div class="container text-center">
+            <a class="btn btn-sm" href="https://github.com/matheusilveiraw"><i data-feather="github"></i></a>
+            @matheusilveiraw | matheus.silveiraw@gmail.com
+        </div>
+    </footer>
+
+    <!-- Ala SQL -->
     <script src="https://cdn.jsdelivr.net/npm/alasql@latest"></script>
 
+    <!-- Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
 
