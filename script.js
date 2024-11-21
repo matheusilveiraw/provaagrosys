@@ -17,6 +17,7 @@ function validarDadosParaCadastro() {
     validarDataNascimento();
     validarTelefone();
     validarCelular();
+    validarCep();
 
 
     console.log(dataNascimento);
@@ -219,11 +220,36 @@ function validarCelular() {
     }
 
     if (celular.length != 8) {
-        errosCelular.push("celular deve ter 11 caracteres!");
+        errosCelular.push("Celular deve ter 11 caracteres!");
     }
 
 
     if (errosCelular.length > 0) {
         document.getElementById('errosCelular').innerHTML = errosCelular.join("<br>");
+    }
+} 
+
+function validarCep() {
+    let cep = document.getElementById('cep').value;
+    let errosCep = [];
+    const apenasNumeros = /[^0-9 ]/g; 
+
+    document.getElementById('errosCep').innerHTML = "";
+
+    if (cep === "") {
+        errosCep.push("O campo CEP é obrigátorio");
+    }
+
+    if (cep.match(apenasNumeros)) {
+        errosCpf.push("Não é permitido caracteres especiais e letras no campo CEP.");
+    }
+
+    if (cep.length != 8) {
+        errosCep.push("cep deve ter 8 caracteres!");
+    }
+
+
+    if (errosCep.length > 0) {
+        document.getElementById('errosCep').innerHTML = errosCep.join("<br>");
     }
 } 
