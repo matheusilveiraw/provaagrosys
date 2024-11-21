@@ -1,7 +1,6 @@
 function validarDadosParaCadastro() {
     // Coletando os valores dos inputs
 
-    let telefone = document.getElementById('telefone').value;
     let celular = document.getElementById('celular').value;
     let cep = document.getElementById('cep').value;
     let rua = document.getElementById('rua').value;
@@ -17,6 +16,7 @@ function validarDadosParaCadastro() {
     validarCPF();
     validarDataNascimento();
     validarTelefone();
+    validarCelular();
 
 
     console.log(dataNascimento);
@@ -192,7 +192,38 @@ function validarTelefone() {
     if (telefone.match(apenasNumeros)) {
         errosCpf.push("Não é permitido caracteres especiais e letras no campo telefone.");
     }
+
+    if (telefone.length != 8) {
+        errosTelefone.push("Telefone deve ter 11 caracteres!");
+    }
+
+
     if (errosTelefone.length > 0) {
         document.getElementById('errosTelefone').innerHTML = errosTelefone.join("<br>");
+    }
+} 
+
+function validarCelular() {
+    let celular = document.getElementById('celular').value;
+    let errosCelular = [];
+    const apenasNumeros = /[^0-9 ]/g; 
+
+    document.getElementById('errosCelular').innerHTML = "";
+
+    if (celular === "") {
+        errosCelular.push("O campo celular é obrigátorio");
+    }
+
+    if (celular.match(apenasNumeros)) {
+        errosCpf.push("Não é permitido caracteres especiais e letras no campo celular.");
+    }
+
+    if (celular.length != 8) {
+        errosCelular.push("celular deve ter 11 caracteres!");
+    }
+
+
+    if (errosCelular.length > 0) {
+        document.getElementById('errosCelular').innerHTML = errosCelular.join("<br>");
     }
 } 
