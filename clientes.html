@@ -39,53 +39,51 @@
         </div>
     </nav>
 
-    <div class="container text-center flex-grow-1 mt-5">
+    <div class="container-fluid text-center flex-grow-1 mt-4">
         <div class="row">
-            <div class="col"> </div>
-            <div class="col-10">
+            <div class="col-lg-1 col-md-12"> </div>
+            <div class="col-lg-10 col-md-12">
                 <h1>Clientes</h1>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Nome</th>
                             <th scope="col">CPF</th>
-                            <th scope="col">Data de Nascimento</th>
+                            <th scope="col">Data de Nasc.</th>
                             <th scope="col">Telefone</th>
                             <th scope="col">Celular</th>
-
                         </tr>
                     </thead>
                     <tbody id="corpoListaClientes">
-
+                        <!-- Linhas serão geradas dinamicamente -->
                     </tbody>
                 </table>
 
-                <div class="container text-center mb-3">
-                    <a class="btn btn-dark btn-lg col-sm-3 me-2" href="cadastrar_cliente.html" role="button">Cadastrar</a>
+                <div class="container-fluid text-center mb-3">
+                    <a class="btn btn-dark btn-lg w-100 w-md-auto" href="cadastrar_cliente.html"
+                        role="button">Cadastrar</a>
                 </div>
             </div>
-            <div class=" col">
-                </div>
-            </div>
+            <div class="col-lg-1 col-md-12"></div>
         </div>
+    </div>
 
 
-        <footer class="footer py-3 bg-dark text-light">
-            <div class="container text-center">
-                <a class="btn btn-sm" href="https://github.com/matheusilveiraw"><i data-feather="github"></i></a>
-                @matheusilveiraw | matheus.silveiraw@gmail.com
-            </div>
-        </footer>
+    <footer class="footer py-3 bg-dark text-light">
+        <div class="container text-center">
+            <a class="btn btn-sm" href="https://github.com/matheusilveiraw"><i data-feather="github"></i></a>
+            @matheusilveiraw | matheus.silveiraw@gmail.com
+        </div>
+    </footer>
 
-        <!-- Ala SQL -->
-        <script src="https://cdn.jsdelivr.net/npm/alasql@latest"></script>
+    <!-- Ala SQL -->
+    <script src="https://cdn.jsdelivr.net/npm/alasql@latest"></script>
 
-        <!-- Bootstrap -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-        <script src="script.js"></script>
+    <!-- Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>

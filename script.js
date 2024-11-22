@@ -110,33 +110,40 @@ function carregarListaClientes() {
 
   corpoListaClientes.innerHTML = "";
 
-  console.log(clientes);
-
   clientes.forEach((cliente) => {
     const tr = document.createElement("tr");
 
-    const tdId = document.createElement("td");
-    tdId.textContent = cliente.id;
+    // const tdId = document.createElement("td");
+    // tdId.textContent = cliente.id;
 
     const tdNome = document.createElement("td");
     tdNome.textContent = cliente.nome_completo;
 
     const tdCpf = document.createElement("td");
-    tdCpf.textContent = cliente.cpf;
+    cpfFormatado = cliente.cpf.toString().replace(/\D/g, '');
+    cpfFormatado = cpfFormatado.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1 $2 $3-$4");
+
+    tdCpf.textContent = cpfFormatado;
 
     const tdDataNascimento = document.createElement("td");
     tdDataNascimento.textContent = cliente.data_nascimento;
 
     const tdTelefone = document.createElement("td");
-    tdTelefone.textContent = cliente.telefone;
+    telefoneFormatado = cliente.telefone.toString().replace(/\D/g, '');
+    telefoneFormatado = telefoneFormatado.replace(/(\d{5})(\d{4})/, "$1-$2");
+
+    tdTelefone.textContent = telefoneFormatado;
 
     const tdCelular = document.createElement("td");
-    tdCelular.textContent = cliente.celular;
+    celularFormatado = cliente.celular.toString().replace(/\D/g, '');
+    celularFormatado = celularFormatado.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+
+    tdCelular.textContent = celularFormatado;
 
     //basicamente criei os elementos aqui em cima e dei os valores
     //abaixo eu crio eles dentro de um tr no html e depois eu boto todos dentro da tbody que to chamando de corpoListaClientes
 
-    tr.appendChild(tdId);
+    // tr.appendChild(tdId);
     tr.appendChild(tdNome);
     tr.appendChild(tdCpf);
     tr.appendChild(tdDataNascimento);
