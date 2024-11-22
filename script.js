@@ -1,3 +1,4 @@
+checarLogado();
 criarBanco();
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -7,6 +8,21 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
+function deslogarSistema() {
+    localStorage.setItem("usuarioLogado", false);
+    window.location.href = "index.html";
+}
+
+function checarLogado() { 
+  if (!(window.location.pathname.includes("index.html") || window.location.pathname.includes("cadastro.html"))) {
+    console.log('teste 1');
+    if (localStorage.getItem('usuarioLogado') == 'false') {
+      console.log('teste 2');
+      alert('Você precisa logar no sistema!');
+      window.location.href = "index.html"; 
+    }
+  }
+}
 
 function limparBanco() {
   alasql("DETACH DATABASE argosql");
@@ -349,6 +365,7 @@ function logar() {
         usuario,
       ])[0].senha == senha
     ) {
+      localStorage.setItem("usuarioLogado", true);
       window.location.href = "acesso_sistema.html";
     } else {
       errosSenha.push("A senha está incorreta!");
