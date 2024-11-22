@@ -124,22 +124,6 @@ function exportarBancoJSON() {
   link.click();
 }
 
-// function validarIdentCliente() {
-//   let identCliente = document.getElementById("ident_cliente").value;
-//   let errosIdentCliente = [];
-
-//   document.getElementById("errosIdentCliente").innerHTML = "";
-
-//   if (identCliente === "") {
-//     errosIdentCliente.push("Você deve selecionar um dos clientes!");
-//     document.getElementById("errosIdentCliente").innerHTML =
-//       errosIdentCliente.join("<br>");
-//     return 1;
-//   }
-
-//   return 0;
-// }
-
 function carregarEnderecos() {
   const enderecos = alasql(
     "SELECT id, rua, bairro, cidade FROM cadastros_enderecos"
@@ -173,7 +157,6 @@ function cadastrarEnderecoBanco() {
   let cidade = document.getElementById("cidade").value;
   let estado = document.getElementById("estado").value;
   let pais = document.getElementById("pais").value;
-  // let clienteId = document.getElementById("ident_cliente").value;
 
   const buscaIdsEnderecos = alasql("SELECT id FROM cadastros_enderecos");
   let novoEnderecoId =
@@ -211,40 +194,67 @@ function validarDadosEndereco() {
 
 function carregarListaEnderecos() {
   const enderecos = alasql("SELECT * FROM cadastros_enderecos");
+  const clientes = alasql("SELECT * FROM cadastros_clientes");
   const corpoListaEnderecos = document.getElementById("corpoListaEnderecos");
 
   corpoListaEnderecos.innerHTML = "";
 
-  enderecos.forEach((endereco) => {
+  for (let index = 0; index < enderecos.length; index++) {
+    const element = enderecos[index];
+
     const tr = document.createElement("tr");
 
-    // const tdId = document.createElement("td");
-    // tdId.textContent = endereco.id;
-
     const tdCep = document.createElement("td");
-    cepFormatado = endereco.cep.toString().replace(/\D/g, "");
+    cepFormatado = element.cep.toString().replace(/\D/g, "");
     cepFormatado = cepFormatado.replace(/(\d{5})(\d{3})/, "$1-$2");
     tdCep.textContent = cepFormatado;
 
     const tdRua = document.createElement("td");
-    tdRua.textContent = endereco.rua;
+    tdRua.textContent = element.rua;
     tdRua.classList.add("esconde-pequeno");
 
     const tdBairro = document.createElement("td");
-    tdBairro.textContent = endereco.bairro;
+    tdBairro.textContent = element.bairro;
 
     const tdCidade = document.createElement("td");
-    tdCidade.textContent = endereco.cidade;
+    tdCidade.textContent = element.cidade;
 
     const tdEstado = document.createElement("td");
-    tdEstado.textContent = endereco.estado;
+    tdEstado.textContent = element.estado;
 
     const tdPais = document.createElement("td");
-    tdPais.textContent = endereco.pais;
+    tdPais.textContent = element.pais;
     tdPais.classList.add("esconde-pequeno");
 
     const tdCliente = document.createElement("td");
-    tdCliente.textContent = endereco.cliente;
+
+    for (let j = 0; j < clientes.length; j++) {
+      const e = clientes[j];
+
+      if (e.endereco_princiapl == element.id) {
+        tdCliente.textContent = element.id;
+      }
+    }
+
+    for (let index = 0; index < clientes.length; index++) {
+      const j = clientes[index];
+
+      if(j.enderecos_secundarios) { 
+        const numeros = j.enderecos_secundarios.match(/\d+/g);
+
+        if (numeros) {
+          const numerosConvertidos = numeros.map(Number);
+  
+          for (let index2 = 0; index2 < numerosConvertidos.length; index2++) {
+            const e = numerosConvertidos[index2];
+            
+            if (e == element.id) {
+              tdCliente.textContent = element.id;
+            }
+          }
+        }
+      }
+    }
 
     // tr.appendChild(tdId);
     tr.appendChild(tdCep);
@@ -256,7 +266,7 @@ function carregarListaEnderecos() {
     tr.appendChild(tdCliente);
 
     corpoListaEnderecos.appendChild(tr);
-  });
+  }
 }
 
 function carregarListaClientes() {
@@ -321,26 +331,41 @@ function cadastrarClienteBanco() {
   let dataNascimento = document.getElementById("dataNascimento").value;
   let telefone = document.getElementById("telefone").value;
   let celular = document.getElementById("celular").value;
+  let endereco_princiapl = document.getElementById('enderecoPrincipal').value;
+  let enderecos_secundarios = document.getElementsByClassName('endereco-secundario').value;
+
   const buscaIds = alasql("SELECT id FROM cadastros_clientes");
   let novoId = buscaIds.length > 0 ? buscaIds[buscaIds.length - 1].id + 1 : 1;
 
-  alasql("INSERT INTO cadastros_clientes VALUES (?, ?, ?, ?, ?, ?)", [
+  alasql(
+    "CREATE TABLE IF NOT EXISTS cadastros_clientes (id INT, nome_completo STRING, data_nascimento DATE, telefone BIGINT, celular BIGINT, cpf BIGINT, endereco_princiapl INT, enderecos_secundarios TEXT)"
+  );
+
+  alasql("INSERT INTO cadastros_clientes VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [
     novoId,
     nomeCompleto,
     dataNascimento,
     telefone,
     celular,
     cpf,
+    endereco_princiapl,
+    enderecos_secundarios
   ]);
 
   window.location.href = "clientes.html";
 }
 
 function validarDadosEnderecoPrincipal() {
-  let enderecoPrincipal = parseInt(document.getElementById("enderecoPrincipal").value);
+  let enderecoPrincipal = parseInt(
+    document.getElementById("enderecoPrincipal").value
+  );
   let errosEnderecoPrincipal = [];
-  const enderecosPrincipaisEmUso = alasql("select endereco_princiapl FROM cadastros_clientes");
-  const enderecosSecundariosEmUso = alasql("select enderecos_secundarios FROM cadastros_clientes");
+  const enderecosPrincipaisEmUso = alasql(
+    "select endereco_princiapl FROM cadastros_clientes"
+  );
+  const enderecosSecundariosEmUso = alasql(
+    "select enderecos_secundarios FROM cadastros_clientes"
+  );
 
   document.getElementById("errosEnderecoPrincipal").innerHTML = "";
 
@@ -353,8 +378,8 @@ function validarDadosEnderecoPrincipal() {
 
   for (let index = 0; index < enderecosPrincipaisEmUso.length; index++) {
     const element = enderecosPrincipaisEmUso[index];
-    
-    if(element.endereco_princiapl == enderecoPrincipal) { 
+
+    if (element.endereco_princiapl == enderecoPrincipal) {
       errosEnderecoPrincipal.push("Esse endereço já está em uso!");
       document.getElementById("errosEnderecoPrincipal").innerHTML =
         errosEnderecoPrincipal.join("<br>");
@@ -367,26 +392,26 @@ function validarDadosEnderecoPrincipal() {
   for (let index = 0; index < enderecosSecundariosEmUso.length; index++) {
     const element = enderecosSecundariosEmUso[index];
 
-    const numeros = element.enderecos_secundarios.match(/\d+/g); 
-    
+    const numeros = element.enderecos_secundarios.match(/\d+/g);
+
     if (numeros) {
       const numerosConvertidos = numeros.map(Number);
 
       for (let index2 = 0; index2 < numerosConvertidos.length; index2++) {
         const e = numerosConvertidos[index2];
 
-        if(e == enderecoPrincipal) { 
+        if (e == enderecoPrincipal) {
           errosEnderecoPrincipal.push("Esse endereço já está em uso!");
           document.getElementById("errosEnderecoPrincipal").innerHTML =
             errosEnderecoPrincipal.join("<br>");
           return 1;
-        }        
+        }
       }
     }
 
-    //aqui os valores secundarios são pegos json pelo banco, aí tem que converter e como pode ter mais de um 
+    //aqui os valores secundarios são pegos json pelo banco, aí tem que converter e como pode ter mais de um
     //tem que fazer um for para rodar os números secundarios e um for neles para rodar os valores dos secundarios dentro
-    //das arrays que eles estão 
+    //das arrays que eles estão
   }
   return 0;
 }
@@ -428,7 +453,7 @@ function criarBanco() {
 
   // alasql(`
   //   INSERT INTO cadastros_usuarios (nome_usuario, senha)
-  //   VALUES 
+  //   VALUES
   //     ('usuario1', 'senha123'),
   //     ('usuario2', 'senha456'),
   //     ('usuario3', 'senha789'),
@@ -438,7 +463,7 @@ function criarBanco() {
 
   // alasql(`
   //   INSERT INTO cadastros_clientes (id, nome_completo, data_nascimento, telefone, celular, cpf, endereco_princiapl, enderecos_secundarios)
-  //   VALUES 
+  //   VALUES
   //     (1, 'João Silva', '1985-02-15', 1122334455, 11987654321, 12345678901, 1, '[2, 3]'),
   //     (2, 'Maria Oliveira', '1990-07-25', 1133445566, 11976543210, 23456789012, 4, '[5]'),
   //     (3, 'Carlos Souza', '1982-11-30', 1144556677, 11865432109, 34567890123, 6, '[7, 8]'),
@@ -448,7 +473,7 @@ function criarBanco() {
 
   // alasql(`
   //   INSERT INTO cadastros_enderecos (id, cep, rua, bairro, cidade, estado, pais)
-  //   VALUES 
+  //   VALUES
   //     (1, 12345678, 'Rua das Flores', 'Jardim Primavera', 'São Paulo', 'SP', 'Brasil'),
   //     (2, 23456789, 'Avenida Central', 'Centro', 'Rio de Janeiro', 'RJ', 'Brasil'),
   //     (3, 34567890, 'Rua do Sol', 'Bela Vista', 'Belo Horizonte', 'MG', 'Brasil'),
