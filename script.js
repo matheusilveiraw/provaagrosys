@@ -1,5 +1,60 @@
 criarBanco();
 
+function carregarListaEnderecos() { 
+  // Busca os dados da tabela 'cadastros_enderecos'
+  const enderecos = alasql("SELECT * FROM cadastros_enderecos");
+  const corpoListaEnderecos = document.getElementById("corpoListaEnderecos");
+
+  // Limpa o conteúdo anterior do tbody
+  corpoListaEnderecos.innerHTML = '';
+
+  console.log(enderecos);
+
+  // Itera sobre os endereços e cria as linhas dinamicamente
+  enderecos.forEach(endereco => {
+      const tr = document.createElement('tr');
+
+      // Criando as células (td) e adicionando os valores
+      const tdId = document.createElement('td');
+      tdId.textContent = endereco.id;
+
+      const tdCep = document.createElement('td');
+      tdCep.textContent = endereco.cep;
+
+      const tdRua = document.createElement('td');
+      tdRua.textContent = endereco.rua;
+
+      const tdBairro = document.createElement('td');
+      tdBairro.textContent = endereco.bairro;
+
+      const tdCidade = document.createElement('td');
+      tdCidade.textContent = endereco.cidade;
+
+      const tdEstado = document.createElement('td');
+      tdEstado.textContent = endereco.estado;
+
+      const tdPais = document.createElement('td');
+      tdPais.textContent = endereco.pais;
+
+      const tdCliente = document.createElement('td');
+      tdCliente.textContent = endereco.cliente;
+
+      // Adiciona as células na linha
+      tr.appendChild(tdId);
+      tr.appendChild(tdCep);
+      tr.appendChild(tdRua);
+      tr.appendChild(tdBairro);
+      tr.appendChild(tdCidade);
+      tr.appendChild(tdEstado);
+      tr.appendChild(tdPais);
+      tr.appendChild(tdCliente);
+
+      // Adiciona a linha ao corpo da tabela
+      corpoListaEnderecos.appendChild(tr);
+  });
+}
+
+
 function carregarListaClientes() { 
   const clientes = alasql("SELECT * FROM cadastros_clientes");
   const corpoListaClientes = document.getElementById("corpoListaClientes");
@@ -92,22 +147,30 @@ function criarBanco() {
   }
 
   alasql(
-    "CREATE TABLE IF NOT EXISTS cadastros_enderecos (id, number, cep number, rua STRING, bairro string, cidade string, estado string, estado string, pais string, cliente number)"
+    "CREATE TABLE IF NOT EXISTS cadastros_enderecos (id INT, cep BIGINT, rua STRING, bairro string, cidade string, estado string, pais string, cliente INT)"
   );
 
   if (alasql.tables.cadastros_enderecos) {
     alasql("SELECT * FROM cadastros_enderecos");
   }  
 
-  // alasql((`
-  //   INSERT INTO cadastros_clientes (id, nome_completo, data_nascimento, telefone, celular, cpf)
-  //   VALUES
-  //   (1, 'João Silva', '1985-02-15', 1122334455, 11987654321, 12345678901),
-  //   (2, 'Maria Oliveira', '1990-07-25', 1133445566, 11976543210, 23456789012),
-  //   (3, 'Carlos Souza', '1982-11-30', 1144556677, 11865432109, 34567890123),
-  //   (4, 'Fernanda Lima', '1995-05-05', 1155667788, 11754321098, 45678901234),
-  //   (5, 'Roberto Pereira', '1978-08-12', 1166778899, 11643210987, 56789012345)
-  // `));
+//   alasql(`
+//     INSERT INTO cadastros_enderecos (id, cep, rua, bairro, cidade, estado, pais, cliente) VALUES
+//     (1, 12345678, 'Rua das Flores', 'Jardim Primavera', 'São Paulo', 'SP', 'Brasil', 1),
+//     (2, 23456789, 'Avenida Central', 'Centro', 'Rio de Janeiro', 'RJ', 'Brasil', 2),
+//     (3, 34567890, 'Rua do Sol', 'Bela Vista', 'Belo Horizonte', 'MG', 'Brasil', 3),
+//     (4, 45678901, 'Travessa das Palmeiras', 'Boa Esperança', 'Curitiba', 'PR', 'Brasil', 4);
+// `);
+
+//   alasql((`
+//     INSERT INTO cadastros_clientes (id, nome_completo, data_nascimento, telefone, celular, cpf)
+//     VALUES
+//     (1, 'João Silva', '1985-02-15', 1122334455, 11987654321, 12345678901),
+//     (2, 'Maria Oliveira', '1990-07-25', 1133445566, 11976543210, 23456789012),
+//     (3, 'Carlos Souza', '1982-11-30', 1144556677, 11865432109, 34567890123),
+//     (4, 'Fernanda Lima', '1995-05-05', 1155667788, 11754321098, 45678901234),
+//     (5, 'Roberto Pereira', '1978-08-12', 1166778899, 11643210987, 56789012345)
+//   `));
   
 }
 
