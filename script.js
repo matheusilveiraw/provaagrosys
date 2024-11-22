@@ -109,7 +109,7 @@ function carregarListaEnderecos() {
 
     const tdRua = document.createElement("td");
     tdRua.textContent = endereco.rua;
-    tdRua.classList.add("d-none");
+    tdRua.classList.add("esconde-pequeno");
 
     const tdBairro = document.createElement("td");
     tdBairro.textContent = endereco.bairro;
@@ -122,7 +122,7 @@ function carregarListaEnderecos() {
 
     const tdPais = document.createElement("td");
     tdPais.textContent = endereco.pais;
-    tdPais.classList.add("d-none");
+    tdPais.classList.add("esconde-pequeno");
 
     const tdCliente = document.createElement("td");
     tdCliente.textContent = endereco.cliente;
