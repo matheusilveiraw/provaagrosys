@@ -1,0 +1,9 @@
+Olá, meu caro avaliador
+
+Segue: 
+- abra o sistema pelo index, a maioria das outras páginas vai te jogar para ele de qualquer forma pois você não está logado. 
+- No index você pode se cadastrar clicando no link de cadastro, isso te leva para outra página. No index também tem o link de configurações que te leva para uma página aonde você pode importar dados para o banco, deixei um arquivo nessa pasta: banco_populado.json, alguns dados que estava utilizando para teste. 
+- Independente se você importar os dados ou não, vai precisar logar, caso não importe, vai precisar se cadastrar. Ao importar você pode consultar os dados na webstorage. 
+- Logando no sistema, você vai para a página inicial do sistema, aonde pode exportar os dados do banco. Nele você pode navegar pelos links da navbar, o link clientes vai te levar para a lista de clientes e o link endereços a sua respectiva lista;
+- Cada lista funciona da mesma forma, possuem um link para cadastro aonde você cadastrar um novo item que surgirá caso você consiga passar pelas validações que deixei no sistema. 
+- Obrigado por sua atenção!

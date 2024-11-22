@@ -1,0 +1,249 @@
+{
+  "cadastros_usuarios": [
+    {
+      "nome_usuario": "usuario1",
+      "senha": "senha123"
+    },
+    {
+      "nome_usuario": "usuario2",
+      "senha": "senha456"
+    },
+    {
+      "nome_usuario": "usuario3",
+      "senha": "senha789"
+    },
+    {
+      "nome_usuario": "usuario4",
+      "senha": "senha101"
+    },
+    {
+      "nome_usuario": "usuario5",
+      "senha": "senha202"
+    }
+  ],
+  "cadastros_clientes": [
+    {
+      "id": 1,
+      "nome_completo": "João da Silva",
+      "data_nascimento": "1990-05-10",
+      "telefone": 1234567890,
+      "celular": 9876543210,
+      "cpf": 12345678901,
+      "endereco_principal": 1,
+      "endereco_alternativo1": 0,
+      "endereco_alternativo2": 0
+    },
+    {
+      "id": 2,
+      "nome_completo": "Maria Oliveira",
+      "data_nascimento": "1985-08-15",
+      "telefone": 1234567891,
+      "celular": 9876543211,
+      "cpf": 12345678902,
+      "endereco_principal": 2,
+      "endereco_alternativo1": 5,
+      "endereco_alternativo2": 0
+    },
+    {
+      "id": 3,
+      "nome_completo": "Carlos Almeida",
+      "data_nascimento": "1978-11-20",
+      "telefone": 1234567892,
+      "celular": 9876543212,
+      "cpf": 12345678903,
+      "endereco_principal": 3,
+      "endereco_alternativo1": 6,
+      "endereco_alternativo2": 7
+    },
+    {
+      "id": 4,
+      "nome_completo": "Ana Souza",
+      "data_nascimento": "1995-03-25",
+      "telefone": 1234567893,
+      "celular": 9876543213,
+      "cpf": 12345678904,
+      "endereco_principal": 4,
+      "endereco_alternativo1": 0,
+      "endereco_alternativo2": 0
+    },
+    {
+      "id": 5,
+      "nome_completo": "Luiz Ferreira",
+      "data_nascimento": "1980-07-30",
+      "telefone": 1234567894,
+      "celular": 9876543214,
+      "cpf": 12345678905,
+      "endereco_principal": 8,
+      "endereco_alternativo1": 9,
+      "endereco_alternativo2": 10
+    },
+    {
+      "id": 6,
+      "nome_completo": "sisadjsaidandi",
+      "data_nascimento": "1234-11-22",
+      "telefone": "12345678",
+      "celular": "123456789",
+      "cpf": "10311122223",
+      "endereco_principal": 15,
+      "endereco_alternativo1": null,
+      "endereco_alternativo2": null
+    },
+    {
+      "id": 7,
+      "nome_completo": "tttttttttt",
+      "data_nascimento": "2024-11-22",
+      "telefone": "12345678",
+      "celular": "123456789",
+      "cpf": "12345678911",
+      "endereco_principal": 14,
+      "endereco_alternativo1": null,
+      "endereco_alternativo2": null
+    }
+  ],
+  "cadastros_enderecos": [
+    {
+      "id": 1,
+      "cep": 12345678,
+      "rua": "Rua das Flores",
+      "bairro": "Jardim Primavera",
+      "cidade": "São Paulo",
+      "estado": "SP",
+      "pais": "Brasil"
+    },
+    {
+      "id": 2,
+      "cep": 23456789,
+      "rua": "Avenida Central",
+      "bairro": "Centro",
+      "cidade": "Rio de Janeiro",
+      "estado": "RJ",
+      "pais": "Brasil"
+    },
+    {
+      "id": 3,
+      "cep": 34567890,
+      "rua": "Rua do Sol",
+      "bairro": "Bela Vista",
+      "cidade": "Belo Horizonte",
+      "estado": "MG",
+      "pais": "Brasil"
+    },
+    {
+      "id": 4,
+      "cep": 45678901,
+      "rua": "Travessa das Palmeiras",
+      "bairro": "Boa Esperança",
+      "cidade": "Curitiba",
+      "estado": "PR",
+      "pais": "Brasil"
+    },
+    {
+      "id": 5,
+      "cep": 78945612,
+      "rua": "5555",
+      "bairro": "5555",
+      "cidade": "55",
+      "estado": "5",
+      "pais": "555"
+    },
+    {
+      "id": 6,
+      "cep": 67890123,
+      "rua": "Rua das Acácias",
+      "bairro": "Jardim das Palmeiras",
+      "cidade": "Manaus",
+      "estado": "AM",
+      "pais": "Brasil"
+    },
+    {
+      "id": 7,
+      "cep": 78901234,
+      "rua": "Avenida do Sol",
+      "bairro": "Centro",
+      "cidade": "Fortaleza",
+      "estado": "CE",
+      "pais": "Brasil"
+    },
+    {
+      "id": 8,
+      "cep": 89012345,
+      "rua": "Rua do Horizonte",
+      "bairro": "Vila Nova",
+      "cidade": "Recife",
+      "estado": "PE",
+      "pais": "Brasil"
+    },
+    {
+      "id": 9,
+      "cep": 90123456,
+      "rua": "Praça da Paz",
+      "bairro": "Alto do Morro",
+      "cidade": "Brasília",
+      "estado": "DF",
+      "pais": "Brasil"
+    },
+    {
+      "id": 10,
+      "cep": 12309876,
+      "rua": "Rua das Magnólias",
+      "bairro": "Bairro do Lago",
+      "cidade": "Curitiba",
+      "estado": "PR",
+      "pais": "Brasil"
+    },
+    {
+      "id": 11,
+      "cep": 23456789,
+      "rua": "Avenida das Nações",
+      "bairro": "Vila Verde",
+      "cidade": "Porto Alegre",
+      "estado": "RS",
+      "pais": "Brasil"
+    },
+    {
+      "id": 12,
+      "cep": 34567890,
+      "rua": "Rua do Comércio",
+      "bairro": "Centro Histórico",
+      "cidade": "Salvador",
+      "estado": "BA",
+      "pais": "Brasil"
+    },
+    {
+      "id": 13,
+      "cep": 45678901,
+      "rua": "Rua da Liberdade",
+      "bairro": "Liberdade",
+      "cidade": "São Paulo",
+      "estado": "SP",
+      "pais": "Brasil"
+    },
+    {
+      "id": 14,
+      "cep": 56789012,
+      "rua": "Rua do Campo",
+      "bairro": "Vila São José",
+      "cidade": "Natal",
+      "estado": "RN",
+      "pais": "Brasil"
+    },
+    {
+      "id": 15,
+      "cep": 67890123,
+      "rua": "Rua do Rio",
+      "bairro": "Vila Mariana",
+      "cidade": "Rio de Janeiro",
+      "estado": "RJ",
+      "pais": "Brasil"
+    },
+    {
+      "id": 16,
+      "cep": "12345678",
+      "rua": "rua 1",
+      "bairro": "bairo 1",
+      "cidade": "cidade 1",
+      "estado": "estado 1",
+      "pais": "estado 2"
+    }
+  ]
+}
