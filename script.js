@@ -1,5 +1,33 @@
 criarBanco();
 
+document.addEventListener("DOMContentLoaded", function() {
+  if (window.location.pathname.includes('cadastrar_enderecos.html')) { //esse código aqui serve pra chamar apenas se estiver na página descrita
+    carregarClientes(); 
+  }
+});
+
+function carregarClientes() {
+  const clientes = alasql("SELECT id, nome_completo FROM cadastros_clientes");
+  const selectCliente = document.getElementById("ident_cliente");
+
+  selectCliente.innerHTML = '<option value="" disabled selected>Selecione um cliente</option>';
+
+  if (clientes.length > 0) {
+      clientes.forEach(cliente => {
+          const option = document.createElement("option");
+          option.value = cliente.id;  
+          option.textContent = cliente.nome_completo; 
+          //importante aqui que ele mostra o nome no campo mas pega o id para o banco
+          selectCliente.appendChild(option);
+      });
+  } else {
+      const option = document.createElement("option");
+      option.disabled = true;
+      option.textContent = "Nenhum cliente encontrado";
+      selectCliente.appendChild(option);
+  }
+}
+
 function cadastrarEnderecoBanco() {
   let cep = document.getElementById("cep").value;
   let rua = document.getElementById("rua").value;
@@ -15,7 +43,6 @@ function cadastrarEnderecoBanco() {
       ? buscaIdsEnderecos[buscaIdsEnderecos.length - 1].id + 1
       : 1;
 
-  // Insere o novo endereço na tabela
   alasql("INSERT INTO cadastros_enderecos VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [
     novoEnderecoId,
     cep,
@@ -27,7 +54,6 @@ function cadastrarEnderecoBanco() {
     clienteId,
   ]);
 
-  // Redireciona para a página de listagem de endereços
   window.location.href = "enderecos.html";
 }
 
@@ -40,7 +66,6 @@ function validarDadosEndereco() {
   erros += validarCidade();
   erros += validarEstado();
   erros += validarPais();
-  // erros += validarIdentCliente();
 
   if (erros == 0) {
     cadastrarEnderecoBanco();
