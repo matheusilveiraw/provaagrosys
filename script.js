@@ -7,6 +7,28 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
+function exportarBancoJSON() {
+
+  const usuarios = alasql("SELECT * FROM cadastros_usuarios");
+  const clientes = alasql("SELECT * FROM cadastros_clientes");
+  const enderecos = alasql("SELECT * FROM cadastros_enderecos");
+
+  const dadosBanco = {
+    cadastros_usuarios: usuarios,
+    cadastros_clientes: clientes,
+    cadastros_enderecos: enderecos,
+  };
+
+  const dadosJSON = JSON.stringify(dadosBanco, null, 2);
+
+  //a partir daqui faz o download
+  const blob = new Blob([dadosJSON], { type: "application/json" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "banco_de_dados.json";
+  link.click();
+}
+
 function validarIdentCliente() { 
   let identCliente = document.getElementById("ident_cliente").value;
   let errosIdentCliente = [];
