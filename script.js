@@ -1,100 +1,149 @@
 criarBanco();
 
-function carregarListaEnderecos() { 
+function cadastrarEnderecoBanco() {
+  let cep = document.getElementById("cep").value;
+  let rua = document.getElementById("rua").value;
+  let bairro = document.getElementById("bairro").value;
+  let cidade = document.getElementById("cidade").value;
+  let estado = document.getElementById("estado").value;
+  let pais = document.getElementById("pais").value;
+  let clienteId = document.getElementById("ident_cliente").value; 
+
+  const buscaIdsEnderecos = alasql("SELECT id FROM cadastros_enderecos");
+  let novoEnderecoId =
+    buscaIdsEnderecos.length > 0
+      ? buscaIdsEnderecos[buscaIdsEnderecos.length - 1].id + 1
+      : 1;
+
+  // Insere o novo endereço na tabela
+  alasql("INSERT INTO cadastros_enderecos VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [
+    novoEnderecoId,
+    cep,
+    rua,
+    bairro,
+    cidade,
+    estado,
+    pais,
+    clienteId,
+  ]);
+
+  // Redireciona para a página de listagem de endereços
+  window.location.href = "enderecos.html";
+}
+
+function validarDadosEndereco() {
+  erros = 0;
+
+  erros += validarCep();
+  erros += validarRua();
+  erros += validarBairro();
+  erros += validarCidade();
+  erros += validarEstado();
+  erros += validarPais();
+  // erros += validarIdentCliente();
+
+  if (erros == 0) {
+    cadastrarEnderecoBanco();
+    console.log("deu great");
+  } else {
+    console.log("corrija os erros");
+  }
+}
+
+function carregarListaEnderecos() {
   // Busca os dados da tabela 'cadastros_enderecos'
   const enderecos = alasql("SELECT * FROM cadastros_enderecos");
   const corpoListaEnderecos = document.getElementById("corpoListaEnderecos");
 
   // Limpa o conteúdo anterior do tbody
-  corpoListaEnderecos.innerHTML = '';
+  corpoListaEnderecos.innerHTML = "";
 
   console.log(enderecos);
 
   // Itera sobre os endereços e cria as linhas dinamicamente
-  enderecos.forEach(endereco => {
-      const tr = document.createElement('tr');
+  enderecos.forEach((endereco) => {
+    const tr = document.createElement("tr");
 
-      // Criando as células (td) e adicionando os valores
-      const tdId = document.createElement('td');
-      tdId.textContent = endereco.id;
+    // Criando as células (td) e adicionando os valores
+    const tdId = document.createElement("td");
+    tdId.textContent = endereco.id;
 
-      const tdCep = document.createElement('td');
-      tdCep.textContent = endereco.cep;
+    const tdCep = document.createElement("td");
+    tdCep.textContent = endereco.cep;
 
-      const tdRua = document.createElement('td');
-      tdRua.textContent = endereco.rua;
+    const tdRua = document.createElement("td");
+    tdRua.textContent = endereco.rua;
 
-      const tdBairro = document.createElement('td');
-      tdBairro.textContent = endereco.bairro;
+    const tdBairro = document.createElement("td");
+    tdBairro.textContent = endereco.bairro;
 
-      const tdCidade = document.createElement('td');
-      tdCidade.textContent = endereco.cidade;
+    const tdCidade = document.createElement("td");
+    tdCidade.textContent = endereco.cidade;
 
-      const tdEstado = document.createElement('td');
-      tdEstado.textContent = endereco.estado;
+    const tdEstado = document.createElement("td");
+    tdEstado.textContent = endereco.estado;
 
-      const tdPais = document.createElement('td');
-      tdPais.textContent = endereco.pais;
+    const tdPais = document.createElement("td");
+    tdPais.textContent = endereco.pais;
 
-      const tdCliente = document.createElement('td');
-      tdCliente.textContent = endereco.cliente;
+    const tdCliente = document.createElement("td");
+    tdCliente.textContent = endereco.cliente;
 
-      // Adiciona as células na linha
-      tr.appendChild(tdId);
-      tr.appendChild(tdCep);
-      tr.appendChild(tdRua);
-      tr.appendChild(tdBairro);
-      tr.appendChild(tdCidade);
-      tr.appendChild(tdEstado);
-      tr.appendChild(tdPais);
-      tr.appendChild(tdCliente);
+    // Adiciona as células na linha
+    tr.appendChild(tdId);
+    tr.appendChild(tdCep);
+    tr.appendChild(tdRua);
+    tr.appendChild(tdBairro);
+    tr.appendChild(tdCidade);
+    tr.appendChild(tdEstado);
+    tr.appendChild(tdPais);
+    tr.appendChild(tdCliente);
 
-      // Adiciona a linha ao corpo da tabela
-      corpoListaEnderecos.appendChild(tr);
+    // Adiciona a linha ao corpo da tabela
+    corpoListaEnderecos.appendChild(tr);
   });
 }
 
-
-function carregarListaClientes() { 
+function carregarListaClientes() {
   const clientes = alasql("SELECT * FROM cadastros_clientes");
   const corpoListaClientes = document.getElementById("corpoListaClientes");
 
-  corpoListaClientes.innerHTML = '';
+  corpoListaClientes.innerHTML = "";
 
-  console.log(clientes)
+  console.log(clientes);
 
-  clientes.forEach(cliente => {
-      const tr = document.createElement('tr');
+  clientes.forEach((cliente) => {
+    const tr = document.createElement("tr");
 
-      const tdId = document.createElement('td');
-      tdId.textContent = cliente.id;
+    const tdId = document.createElement("td");
+    tdId.textContent = cliente.id;
 
-      const tdNome = document.createElement('td');
-      tdNome.textContent = cliente.nome_completo;
+    const tdNome = document.createElement("td");
+    tdNome.textContent = cliente.nome_completo;
 
-      const tdCpf = document.createElement('td');
-      tdCpf.textContent = cliente.cpf;
+    const tdCpf = document.createElement("td");
+    tdCpf.textContent = cliente.cpf;
 
-      const tdDataNascimento = document.createElement('td');
-      tdDataNascimento.textContent = cliente.data_nascimento;
+    const tdDataNascimento = document.createElement("td");
+    tdDataNascimento.textContent = cliente.data_nascimento;
 
-      const tdTelefone = document.createElement('td');
-      tdTelefone.textContent = cliente.telefone;
+    const tdTelefone = document.createElement("td");
+    tdTelefone.textContent = cliente.telefone;
 
-      const tdCelular = document.createElement('td');
-      tdCelular.textContent = cliente.celular;
+    const tdCelular = document.createElement("td");
+    tdCelular.textContent = cliente.celular;
 
-      //basicamente criei os elementos aqui em cima e dei os valores
-      //abaixo eu crio eles dentro de um tr no html e depois eu boto todos dentro da tbody que to chamando de corpoListaClientes
+    //basicamente criei os elementos aqui em cima e dei os valores
+    //abaixo eu crio eles dentro de um tr no html e depois eu boto todos dentro da tbody que to chamando de corpoListaClientes
 
-      tr.appendChild(tdId);
-      tr.appendChild(tdNome);
-      tr.appendChild(tdCpf);
-      tr.appendChild(tdDataNascimento);
-      tr.appendChild(tdTelefone);
-      tr.appendChild(tdCelular);
+    tr.appendChild(tdId);
+    tr.appendChild(tdNome);
+    tr.appendChild(tdCpf);
+    tr.appendChild(tdDataNascimento);
+    tr.appendChild(tdTelefone);
+    tr.appendChild(tdCelular);
 
-      corpoListaClientes.appendChild(tr);
+    corpoListaClientes.appendChild(tr);
   });
 }
 
@@ -106,9 +155,16 @@ function cadastrarClienteBanco() {
   let celular = document.getElementById("celular").value;
   const buscaIds = alasql("SELECT id FROM cadastros_clientes");
   let novoId = buscaIds.length > 0 ? buscaIds[buscaIds.length - 1].id + 1 : 1;
-  
-  alasql("INSERT INTO cadastros_clientes VALUES (?, ?, ?, ?, ?, ?)", [novoId, nomeCompleto, dataNascimento, telefone, celular, cpf]);
-  
+
+  alasql("INSERT INTO cadastros_clientes VALUES (?, ?, ?, ?, ?, ?)", [
+    novoId,
+    nomeCompleto,
+    dataNascimento,
+    telefone,
+    celular,
+    cpf,
+  ]);
+
   window.location.href = "clientes.html";
 }
 
@@ -152,26 +208,25 @@ function criarBanco() {
 
   if (alasql.tables.cadastros_enderecos) {
     alasql("SELECT * FROM cadastros_enderecos");
-  }  
+  }
 
-//   alasql(`
-//     INSERT INTO cadastros_enderecos (id, cep, rua, bairro, cidade, estado, pais, cliente) VALUES
-//     (1, 12345678, 'Rua das Flores', 'Jardim Primavera', 'São Paulo', 'SP', 'Brasil', 1),
-//     (2, 23456789, 'Avenida Central', 'Centro', 'Rio de Janeiro', 'RJ', 'Brasil', 2),
-//     (3, 34567890, 'Rua do Sol', 'Bela Vista', 'Belo Horizonte', 'MG', 'Brasil', 3),
-//     (4, 45678901, 'Travessa das Palmeiras', 'Boa Esperança', 'Curitiba', 'PR', 'Brasil', 4);
-// `);
+  //   alasql(`
+  //     INSERT INTO cadastros_enderecos (id, cep, rua, bairro, cidade, estado, pais, cliente) VALUES
+  //     (1, 12345678, 'Rua das Flores', 'Jardim Primavera', 'São Paulo', 'SP', 'Brasil', 1),
+  //     (2, 23456789, 'Avenida Central', 'Centro', 'Rio de Janeiro', 'RJ', 'Brasil', 2),
+  //     (3, 34567890, 'Rua do Sol', 'Bela Vista', 'Belo Horizonte', 'MG', 'Brasil', 3),
+  //     (4, 45678901, 'Travessa das Palmeiras', 'Boa Esperança', 'Curitiba', 'PR', 'Brasil', 4);
+  // `);
 
-//   alasql((`
-//     INSERT INTO cadastros_clientes (id, nome_completo, data_nascimento, telefone, celular, cpf)
-//     VALUES
-//     (1, 'João Silva', '1985-02-15', 1122334455, 11987654321, 12345678901),
-//     (2, 'Maria Oliveira', '1990-07-25', 1133445566, 11976543210, 23456789012),
-//     (3, 'Carlos Souza', '1982-11-30', 1144556677, 11865432109, 34567890123),
-//     (4, 'Fernanda Lima', '1995-05-05', 1155667788, 11754321098, 45678901234),
-//     (5, 'Roberto Pereira', '1978-08-12', 1166778899, 11643210987, 56789012345)
-//   `));
-  
+  //   alasql((`
+  //     INSERT INTO cadastros_clientes (id, nome_completo, data_nascimento, telefone, celular, cpf)
+  //     VALUES
+  //     (1, 'João Silva', '1985-02-15', 1122334455, 11987654321, 12345678901),
+  //     (2, 'Maria Oliveira', '1990-07-25', 1133445566, 11976543210, 23456789012),
+  //     (3, 'Carlos Souza', '1982-11-30', 1144556677, 11865432109, 34567890123),
+  //     (4, 'Fernanda Lima', '1995-05-05', 1155667788, 11754321098, 45678901234),
+  //     (5, 'Roberto Pereira', '1978-08-12', 1166778899, 11643210987, 56789012345)
+  //   `));
 }
 
 function logar() {
@@ -485,7 +540,10 @@ function validarCep() {
 
   if (errosCep.length > 0) {
     document.getElementById("errosCep").innerHTML = errosCep.join("<br>");
+    return 1;
   }
+
+  return 0;
 }
 
 function validarRua() {
@@ -500,7 +558,10 @@ function validarRua() {
 
   if (errosRua.length > 0) {
     document.getElementById("errosRua").innerHTML = errosRua.join("<br>");
+    return 1;
   }
+
+  return 0;
 }
 
 function validarBairro() {
@@ -515,7 +576,10 @@ function validarBairro() {
 
   if (errosBairro.length > 0) {
     document.getElementById("errosBairro").innerHTML = errosBairro.join("<br>");
+    return 1;
   }
+
+  return 0;
 }
 
 function validarCidade() {
@@ -530,7 +594,10 @@ function validarCidade() {
 
   if (errosCidade.length > 0) {
     document.getElementById("errosCidade").innerHTML = errosCidade.join("<br>");
+    return 1;
   }
+
+  return 0;
 }
 
 function validarEstado() {
@@ -545,7 +612,10 @@ function validarEstado() {
 
   if (errosEstado.length > 0) {
     document.getElementById("errosEstado").innerHTML = errosEstado.join("<br>");
+    return 1;
   }
+
+  return 0;
 }
 
 function validarPais() {
@@ -560,5 +630,8 @@ function validarPais() {
 
   if (errosPais.length > 0) {
     document.getElementById("errosPais").innerHTML = errosPais.join("<br>");
+    return 1;
   }
+
+  return 0;
 }
