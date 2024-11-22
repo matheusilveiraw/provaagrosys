@@ -3,31 +3,11 @@ criarBanco();
 
 document.addEventListener("DOMContentLoaded", function () {
   if (window.location.pathname.includes("cadastrar_cliente.html")) {
-    carregarEnderecos();
+    carregarEnderecoPrincipalSelect("enderecoPrincipal");
+    carregarEnderecoPrincipalSelect("enderecoAlternativo1");
+    carregarEnderecoPrincipalSelect("enderecoAlternativo2");
   }
 });
-
-function adcInputEndereco() {
-  const div = document.createElement("div");
-  div.classList.add("mt-1");
-
-  const inputEndereco = document.createElement("input");
-  inputEndereco.type = "number";
-  inputEndereco.classList.add("form-control");
-  inputEndereco.class = "endereco-secundario";
-  inputEndereco.placeholder = "Outros endereços";
-  inputEndereco.required = true;
-
-  const pErro = document.createElement("p");
-  pErro.classList.add("text-danger", "erro-fonte", "ml-1");
-  pErro.class = "errosEnderecoPrincipal";
-
-  div.appendChild(inputEndereco);
-  div.appendChild(pErro);
-
-  const container = document.getElementById("containerEnderecos");
-  container.appendChild(div);
-}
 
 function deslogarSistema() {
   localStorage.setItem("usuarioLogado", false);
@@ -124,15 +104,15 @@ function exportarBancoJSON() {
   link.click();
 }
 
-function carregarEnderecos() {
+function carregarEnderecoPrincipalSelect(idEndereco) {
   const enderecos = alasql(
     "SELECT id, rua, bairro, cidade FROM cadastros_enderecos"
   );
 
-  const enderecoPrincipal = document.getElementById("enderecoPrincipal");
+  const enderecoId = document.getElementById(idEndereco);
 
-  enderecoPrincipal.innerHTML =
-    '<option value="" disabled selected>Selecione seu endereço principal</option>';
+  enderecoId.innerHTML =
+    '<option value="0" disabled selected>Selecione seu endereço principal</option>';
 
   if (enderecos.length > 0) {
     enderecos.forEach((endereco) => {
@@ -140,13 +120,13 @@ function carregarEnderecos() {
       option.value = endereco.id;
       option.textContent =
         endereco.rua + ", " + endereco.bairro + ", " + endereco.cidade;
-      enderecoPrincipal.appendChild(option);
+      enderecoId.appendChild(option);
     });
   } else {
     const option = document.createElement("option");
     option.disabled = true;
     option.textContent = "Nenhum Endereco encontrado";
-    enderecoPrincipal.appendChild(option);
+    enderecoId.appendChild(option);
   }
 }
 
@@ -231,7 +211,7 @@ function carregarListaEnderecos() {
     for (let j = 0; j < clientes.length; j++) {
       const e = clientes[j];
 
-      if (e.endereco_princiapl == element.id) {
+      if (e.endereco_principal == element.id) {
         tdCliente.textContent = element.id;
       }
     }
@@ -239,15 +219,15 @@ function carregarListaEnderecos() {
     for (let index = 0; index < clientes.length; index++) {
       const j = clientes[index];
 
-      if(j.enderecos_secundarios) { 
+      if (j.enderecos_secundarios) {
         const numeros = j.enderecos_secundarios.match(/\d+/g);
 
         if (numeros) {
           const numerosConvertidos = numeros.map(Number);
-  
+
           for (let index2 = 0; index2 < numerosConvertidos.length; index2++) {
             const e = numerosConvertidos[index2];
-            
+
             if (e == element.id) {
               tdCliente.textContent = element.id;
             }
@@ -331,89 +311,93 @@ function cadastrarClienteBanco() {
   let dataNascimento = document.getElementById("dataNascimento").value;
   let telefone = document.getElementById("telefone").value;
   let celular = document.getElementById("celular").value;
-  let endereco_princiapl = document.getElementById('enderecoPrincipal').value;
-  let enderecos_secundarios = document.getElementsByClassName('endereco-secundario').value;
+  let endereco_principal = document.getElementById("enderecoPrincipal").value;
+  let endereco_alternativo1 = document.getElementsByClassName(
+    "endereco-alternativo1"
+  ).value;
+  let endereco_alternativo2 = document.getElementsByClassName(
+    "endereco-alternativo2"
+  ).value;
 
   const buscaIds = alasql("SELECT id FROM cadastros_clientes");
   let novoId = buscaIds.length > 0 ? buscaIds[buscaIds.length - 1].id + 1 : 1;
 
   alasql(
-    "CREATE TABLE IF NOT EXISTS cadastros_clientes (id INT, nome_completo STRING, data_nascimento DATE, telefone BIGINT, celular BIGINT, cpf BIGINT, endereco_princiapl INT, enderecos_secundarios TEXT)"
+    "CREATE TABLE IF NOT EXISTS cadastros_clientes (id INT, nome_completo STRING, data_nascimento DATE, telefone BIGINT, celular BIGINT, cpf BIGINT, endereco_principal INT, endereco_alternativo1 INT, endereco_alternativo2 INT)"
   );
 
-  alasql("INSERT INTO cadastros_clientes VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [
+  alasql("INSERT INTO cadastros_clientes VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", [
     novoId,
     nomeCompleto,
     dataNascimento,
     telefone,
     celular,
     cpf,
-    endereco_princiapl,
-    enderecos_secundarios
+    endereco_principal,
+    endereco_alternativo1,
+    endereco_alternativo2,
   ]);
 
   window.location.href = "clientes.html";
 }
 
-function validarDadosEnderecoPrincipal() {
-  let enderecoPrincipal = parseInt(
-    document.getElementById("enderecoPrincipal").value
-  );
-  let errosEnderecoPrincipal = [];
+function validarDadosSelectsEnderecos(nomeEnderecoClasse) {
+  let endereco = parseInt(document.getElementById(nomeEnderecoClasse).value);
+  let errosEndereco = [];
+
   const enderecosPrincipaisEmUso = alasql(
-    "select endereco_princiapl FROM cadastros_clientes"
+    "select endereco_principal FROM cadastros_clientes"
   );
-  const enderecosSecundariosEmUso = alasql(
-    "select enderecos_secundarios FROM cadastros_clientes"
+  const enderecoAlternativo1EmUso = alasql(
+    "select endereco_alternativo1 FROM cadastros_clientes"
   );
+  const enderecoAlternativo2EmUso = alasql(
+    "select endereco_alternativo2 FROM cadastros_clientes"
+  );
+  todosEnderecosSendoUsados = [];
 
-  document.getElementById("errosEnderecoPrincipal").innerHTML = "";
-
-  if (enderecoPrincipal === "") {
-    errosEnderecoPrincipal.push("Você deve selecionar um dos clientes!");
-    document.getElementById("errosEnderecoPrincipal").innerHTML =
-      errosEnderecoPrincipal.join("<br>");
-    return 1;
+    if (endereco == 0) {
+      if (nomeEnderecoClasse != 'enderecoPrincipal') {
+        return 0;      
+      }
+      errosEndereco.push("Nenhum valor foi selecionado!");
+      document.getElementById("erros" + nomeEnderecoClasse).innerHTML =
+        errosEndereco.join("<br>");
+      return 1;
   }
 
-  for (let index = 0; index < enderecosPrincipaisEmUso.length; index++) {
-    const element = enderecosPrincipaisEmUso[index];
+  for (let i = 0; i < enderecosPrincipaisEmUso.length; i++) {
+    const e = enderecosPrincipaisEmUso[i].endereco_principal;
+    todosEnderecosSendoUsados.push(e);
+  }
 
-    if (element.endereco_princiapl == enderecoPrincipal) {
-      errosEnderecoPrincipal.push("Esse endereço já está em uso!");
-      document.getElementById("errosEnderecoPrincipal").innerHTML =
-        errosEnderecoPrincipal.join("<br>");
+  for (let i = 0; i < enderecoAlternativo2EmUso.length; i++) {
+    const e = enderecoAlternativo2EmUso[i].endereco_alternativo2;
+    todosEnderecosSendoUsados.push(e);
+  }
+
+  for (let i = 0; i < enderecoAlternativo1EmUso.length; i++) {
+    const e = enderecoAlternativo1EmUso[i].endereco_alternativo1;
+    todosEnderecosSendoUsados.push(e);
+  }
+
+  for (let i = 0; i < todosEnderecosSendoUsados.length; i++) {
+    const e = todosEnderecosSendoUsados[i];
+
+    if (endereco == e) {
+      debugger;
+      errosEndereco.push("Esse endereço já está sendo usado!");
+      document.getElementById("erros" + nomeEnderecoClasse).innerHTML =
+        errosEndereco.join("<br>");
       return 1;
     }
   }
 
-  //código acima compara com todos códigos principais
-
-  for (let index = 0; index < enderecosSecundariosEmUso.length; index++) {
-    const element = enderecosSecundariosEmUso[index];
-
-    const numeros = element.enderecos_secundarios.match(/\d+/g);
-
-    if (numeros) {
-      const numerosConvertidos = numeros.map(Number);
-
-      for (let index2 = 0; index2 < numerosConvertidos.length; index2++) {
-        const e = numerosConvertidos[index2];
-
-        if (e == enderecoPrincipal) {
-          errosEnderecoPrincipal.push("Esse endereço já está em uso!");
-          document.getElementById("errosEnderecoPrincipal").innerHTML =
-            errosEnderecoPrincipal.join("<br>");
-          return 1;
-        }
-      }
-    }
-
-    //aqui os valores secundarios são pegos json pelo banco, aí tem que converter e como pode ter mais de um
-    //tem que fazer um for para rodar os números secundarios e um for neles para rodar os valores dos secundarios dentro
-    //das arrays que eles estão
+  if (errosEndereco.length > 0) {
+    document.getElementById("erros" + nomeEnderecoClasse).innerHTML =
+      errosEndereco.join("<br>");
+    return 1;
   }
-  return 0;
 }
 
 function validarDadosCliente() {
@@ -424,7 +408,9 @@ function validarDadosCliente() {
   erros += validarDataNascimento();
   erros += validarTelefone();
   erros += validarCelular();
-  erros += validarDadosEnderecoPrincipal();
+  erros += validarDadosSelectsEnderecos("enderecoPrincipal");
+  erros += validarDadosSelectsEnderecos("enderecoAlternativo1");
+  erros += validarDadosSelectsEnderecos("enderecoAlternativo2");
 
   if (erros == 0) {
     cadastrarClienteBanco();
@@ -444,52 +430,52 @@ function criarBanco() {
   );
 
   alasql(
-    "CREATE TABLE IF NOT EXISTS cadastros_clientes (id INT, nome_completo STRING, data_nascimento DATE, telefone BIGINT, celular BIGINT, cpf BIGINT, endereco_princiapl INT, enderecos_secundarios TEXT)"
+    "CREATE TABLE IF NOT EXISTS cadastros_clientes (id INT, nome_completo STRING, data_nascimento DATE, telefone BIGINT, celular BIGINT, cpf BIGINT, endereco_principal INT, endereco_alternativo1 int, endereco_alternativo2 int)"
   );
 
   alasql(
     "CREATE TABLE IF NOT EXISTS cadastros_enderecos (id INT, cep BIGINT, rua STRING, bairro STRING, cidade STRING, estado STRING, pais STRING)"
   );
 
-  // alasql(`
-  //   INSERT INTO cadastros_usuarios (nome_usuario, senha)
+  //   alasql(`
+  //     INSERT INTO cadastros_usuarios (nome_usuario, senha)
+  //     VALUES
+  //       ('usuario1', 'senha123'),
+  //       ('usuario2', 'senha456'),
+  //       ('usuario3', 'senha789'),
+  //       ('usuario4', 'senha101'),
+  //       ('usuario5', 'senha202');
+  //   `);
+
+  //   alasql(`
+  //   INSERT INTO cadastros_clientes (id, nome_completo, data_nascimento, telefone, celular, cpf, endereco_principal, endereco_alternativo1, endereco_alternativo2)
   //   VALUES
-  //     ('usuario1', 'senha123'),
-  //     ('usuario2', 'senha456'),
-  //     ('usuario3', 'senha789'),
-  //     ('usuario4', 'senha101'),
-  //     ('usuario5', 'senha202');
+  //     (1, 'João da Silva', '1990-05-10', 1234567890, 9876543210, 12345678901, 1, 0, 0),
+  //     (2, 'Maria Oliveira', '1985-08-15', 1234567891, 9876543211, 12345678902, 2, 5, 0),
+  //     (3, 'Carlos Almeida', '1978-11-20', 1234567892, 9876543212, 12345678903, 3, 6, 7),
+  //     (4, 'Ana Souza', '1995-03-25', 1234567893, 9876543213, 12345678904, 4, 0, 0),
+  //     (5, 'Luiz Ferreira', '1980-07-30', 1234567894, 9876543214, 12345678905, 8, 9, 10)
   // `);
 
-  // alasql(`
-  //   INSERT INTO cadastros_clientes (id, nome_completo, data_nascimento, telefone, celular, cpf, endereco_princiapl, enderecos_secundarios)
-  //   VALUES
-  //     (1, 'João Silva', '1985-02-15', 1122334455, 11987654321, 12345678901, 1, '[2, 3]'),
-  //     (2, 'Maria Oliveira', '1990-07-25', 1133445566, 11976543210, 23456789012, 4, '[5]'),
-  //     (3, 'Carlos Souza', '1982-11-30', 1144556677, 11865432109, 34567890123, 6, '[7, 8]'),
-  //     (4, 'Fernanda Lima', '1995-05-05', 1155667788, 11754321098, 45678901234, 9, '[10, 11]'),
-  //     (5, 'Roberto Pereira', '1978-08-12', 1166778899, 11643210987, 56789012345, 12, '[13, 14, 15]');
-  // `);
-
-  // alasql(`
-  //   INSERT INTO cadastros_enderecos (id, cep, rua, bairro, cidade, estado, pais)
-  //   VALUES
-  //     (1, 12345678, 'Rua das Flores', 'Jardim Primavera', 'São Paulo', 'SP', 'Brasil'),
-  //     (2, 23456789, 'Avenida Central', 'Centro', 'Rio de Janeiro', 'RJ', 'Brasil'),
-  //     (3, 34567890, 'Rua do Sol', 'Bela Vista', 'Belo Horizonte', 'MG', 'Brasil'),
-  //     (4, 45678901, 'Travessa das Palmeiras', 'Boa Esperança', 'Curitiba', 'PR', 'Brasil'),
-  //     (5, 78945612, '5555', '5555', '55', '5', '555'),
-  //     (6, 67890123, 'Rua das Acácias', 'Jardim das Palmeiras', 'Manaus', 'AM', 'Brasil'),
-  //     (7, 78901234, 'Avenida do Sol', 'Centro', 'Fortaleza', 'CE', 'Brasil'),
-  //     (8, 89012345, 'Rua do Horizonte', 'Vila Nova', 'Recife', 'PE', 'Brasil'),
-  //     (9, 90123456, 'Praça da Paz', 'Alto do Morro', 'Brasília', 'DF', 'Brasil'),
-  //     (10, 12309876, 'Rua das Magnólias', 'Bairro do Lago', 'Curitiba', 'PR', 'Brasil'),
-  //     (11, 23456789, 'Avenida das Nações', 'Vila Verde', 'Porto Alegre', 'RS', 'Brasil'),
-  //     (12, 34567890, 'Rua do Comércio', 'Centro Histórico', 'Salvador', 'BA', 'Brasil'),
-  //     (13, 45678901, 'Rua da Liberdade', 'Liberdade', 'São Paulo', 'SP', 'Brasil'),
-  //     (14, 56789012, 'Rua do Campo', 'Vila São José', 'Natal', 'RN', 'Brasil'),
-  //     (15, 67890123, 'Rua do Rio', 'Vila Mariana', 'Rio de Janeiro', 'RJ', 'Brasil');
-  // `);
+  //   alasql(`
+  //     INSERT INTO cadastros_enderecos (id, cep, rua, bairro, cidade, estado, pais)
+  //     VALUES
+  //       (1, 12345678, 'Rua das Flores', 'Jardim Primavera', 'São Paulo', 'SP', 'Brasil'),
+  //       (2, 23456789, 'Avenida Central', 'Centro', 'Rio de Janeiro', 'RJ', 'Brasil'),
+  //       (3, 34567890, 'Rua do Sol', 'Bela Vista', 'Belo Horizonte', 'MG', 'Brasil'),
+  //       (4, 45678901, 'Travessa das Palmeiras', 'Boa Esperança', 'Curitiba', 'PR', 'Brasil'),
+  //       (5, 78945612, '5555', '5555', '55', '5', '555'),
+  //       (6, 67890123, 'Rua das Acácias', 'Jardim das Palmeiras', 'Manaus', 'AM', 'Brasil'),
+  //       (7, 78901234, 'Avenida do Sol', 'Centro', 'Fortaleza', 'CE', 'Brasil'),
+  //       (8, 89012345, 'Rua do Horizonte', 'Vila Nova', 'Recife', 'PE', 'Brasil'),
+  //       (9, 90123456, 'Praça da Paz', 'Alto do Morro', 'Brasília', 'DF', 'Brasil'),
+  //       (10, 12309876, 'Rua das Magnólias', 'Bairro do Lago', 'Curitiba', 'PR', 'Brasil'),
+  //       (11, 23456789, 'Avenida das Nações', 'Vila Verde', 'Porto Alegre', 'RS', 'Brasil'),
+  //       (12, 34567890, 'Rua do Comércio', 'Centro Histórico', 'Salvador', 'BA', 'Brasil'),
+  //       (13, 45678901, 'Rua da Liberdade', 'Liberdade', 'São Paulo', 'SP', 'Brasil'),
+  //       (14, 56789012, 'Rua do Campo', 'Vila São José', 'Natal', 'RN', 'Brasil'),
+  //       (15, 67890123, 'Rua do Rio', 'Vila Mariana', 'Rio de Janeiro', 'RJ', 'Brasil');
+  //   `);
 }
 
 function logar() {
