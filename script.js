@@ -1,30 +1,47 @@
 criarBanco();
 
-document.addEventListener("DOMContentLoaded", function() {
-  if (window.location.pathname.includes('cadastrar_enderecos.html')) { //esse código aqui serve pra chamar apenas se estiver na página descrita
-    carregarClientes(); 
+document.addEventListener("DOMContentLoaded", function () {
+  if (window.location.pathname.includes("cadastrar_enderecos.html")) {
+    //esse código aqui serve pra chamar apenas se estiver na página descrita
+    carregarClientes();
   }
 });
+
+function validarIdentCliente() { 
+  let identCliente = document.getElementById("ident_cliente").value;
+  let errosIdentCliente = [];
+
+  document.getElementById("errosIdentCliente").innerHTML = "";
+
+  if (identCliente === "") { 
+    errosIdentCliente.push("Você deve selecionar um dos clientes!");
+    document.getElementById("errosIdentCliente").innerHTML = errosIdentCliente.join("<br>");
+    return 1;
+  }
+
+  return 0;
+}
 
 function carregarClientes() {
   const clientes = alasql("SELECT id, nome_completo FROM cadastros_clientes");
   const selectCliente = document.getElementById("ident_cliente");
 
-  selectCliente.innerHTML = '<option value="" disabled selected>Selecione um cliente</option>';
+  selectCliente.innerHTML =
+    '<option value="" disabled selected>Selecione um cliente</option>';
 
   if (clientes.length > 0) {
-      clientes.forEach(cliente => {
-          const option = document.createElement("option");
-          option.value = cliente.id;  
-          option.textContent = cliente.nome_completo; 
-          //importante aqui que ele mostra o nome no campo mas pega o id para o banco
-          selectCliente.appendChild(option);
-      });
-  } else {
+    clientes.forEach((cliente) => {
       const option = document.createElement("option");
-      option.disabled = true;
-      option.textContent = "Nenhum cliente encontrado";
+      option.value = cliente.id;
+      option.textContent = cliente.nome_completo;
+      //importante aqui que ele mostra o nome no campo mas pega o id para o banco
       selectCliente.appendChild(option);
+    });
+  } else {
+    const option = document.createElement("option");
+    option.disabled = true;
+    option.textContent = "Nenhum cliente encontrado";
+    selectCliente.appendChild(option);
   }
 }
 
@@ -35,7 +52,7 @@ function cadastrarEnderecoBanco() {
   let cidade = document.getElementById("cidade").value;
   let estado = document.getElementById("estado").value;
   let pais = document.getElementById("pais").value;
-  let clienteId = document.getElementById("ident_cliente").value; 
+  let clienteId = document.getElementById("ident_cliente").value;
 
   const buscaIdsEnderecos = alasql("SELECT id FROM cadastros_enderecos");
   let novoEnderecoId =
@@ -66,6 +83,7 @@ function validarDadosEndereco() {
   erros += validarCidade();
   erros += validarEstado();
   erros += validarPais();
+  erros += validarIdentCliente();
 
   if (erros == 0) {
     cadastrarEnderecoBanco();
@@ -85,10 +103,9 @@ function carregarListaEnderecos() {
     // tdId.textContent = endereco.id;
 
     const tdCep = document.createElement("td");
-    cepFormatado = endereco.cep.toString().replace(/\D/g, '');
+    cepFormatado = endereco.cep.toString().replace(/\D/g, "");
     cepFormatado = cepFormatado.replace(/(\d{5})(\d{3})/, "$1-$2");
     tdCep.textContent = cepFormatado;
-
 
     const tdRua = document.createElement("td");
     tdRua.textContent = endereco.rua;
@@ -109,7 +126,6 @@ function carregarListaEnderecos() {
 
     const tdCliente = document.createElement("td");
     tdCliente.textContent = endereco.cliente;
-
 
     // tr.appendChild(tdId);
     tr.appendChild(tdCep);
@@ -140,8 +156,11 @@ function carregarListaClientes() {
     tdNome.textContent = cliente.nome_completo;
 
     const tdCpf = document.createElement("td");
-    cpfFormatado = cliente.cpf.toString().replace(/\D/g, '');
-    cpfFormatado = cpfFormatado.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1 $2 $3-$4");
+    cpfFormatado = cliente.cpf.toString().replace(/\D/g, "");
+    cpfFormatado = cpfFormatado.replace(
+      /(\d{3})(\d{3})(\d{3})(\d{2})/,
+      "$1 $2 $3-$4"
+    );
 
     tdCpf.textContent = cpfFormatado;
 
@@ -149,14 +168,17 @@ function carregarListaClientes() {
     tdDataNascimento.textContent = cliente.data_nascimento;
 
     const tdTelefone = document.createElement("td");
-    telefoneFormatado = cliente.telefone.toString().replace(/\D/g, '');
+    telefoneFormatado = cliente.telefone.toString().replace(/\D/g, "");
     telefoneFormatado = telefoneFormatado.replace(/(\d{5})(\d{4})/, "$1-$2");
 
     tdTelefone.textContent = telefoneFormatado;
 
     const tdCelular = document.createElement("td");
-    celularFormatado = cliente.celular.toString().replace(/\D/g, '');
-    celularFormatado = celularFormatado.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+    celularFormatado = cliente.celular.toString().replace(/\D/g, "");
+    celularFormatado = celularFormatado.replace(
+      /(\d{2})(\d{5})(\d{4})/,
+      "($1) $2-$3"
+    );
 
     tdCelular.textContent = celularFormatado;
 
