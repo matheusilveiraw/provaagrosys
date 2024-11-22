@@ -7,8 +7,63 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-function exportarBancoJSON() {
 
+function limparBanco() {
+  alasql("DETACH DATABASE argosql");
+
+  localStorage.clear();
+}
+
+function importarBanco() {
+  const inputArquivoBanco = document.getElementById("arquivoBanco");
+  const arquivo = inputArquivoBanco.files[0];
+
+  if (!arquivo) {
+    alert("Por favor, selecione um arquivo JSON.");
+    return;
+  }
+
+  limparBanco(); //garante que o banco tá vazio
+  criarBanco(); //cria tudo de novo sem dados aí da certo
+
+  const leitor = new FileReader();
+
+  leitor.onload = function (evento) {
+    try {
+      const dados = JSON.parse(evento.target.result);
+
+      if (dados.cadastros_usuarios) {
+        dados.cadastros_usuarios.forEach(usuario => {
+          alasql("INSERT INTO cadastros_usuarios VALUES ?", [usuario]);
+        });
+      }
+
+      if (dados.cadastros_clientes) {
+        dados.cadastros_clientes.forEach(cliente => {
+          alasql("INSERT INTO cadastros_clientes VALUES ?", [cliente]);
+        });
+      }
+
+      if (dados.cadastros_enderecos) {
+        dados.cadastros_enderecos.forEach(endereco => {
+          alasql("INSERT INTO cadastros_enderecos VALUES ?", [endereco]);
+        });
+      }
+
+      alert("Banco de dados importado com sucesso!");
+    } catch (erro) {
+      alert("Erro ao processar o arquivo JSON.");
+    }
+  };
+
+  leitor.onerror = function () {
+    alert("Erro ao ler o arquivo. Por favor, tente novamente.");
+  };
+
+  leitor.readAsText(arquivo);
+}
+
+function exportarBancoJSON() {
   const usuarios = alasql("SELECT * FROM cadastros_usuarios");
   const clientes = alasql("SELECT * FROM cadastros_clientes");
   const enderecos = alasql("SELECT * FROM cadastros_enderecos");
@@ -29,15 +84,16 @@ function exportarBancoJSON() {
   link.click();
 }
 
-function validarIdentCliente() { 
+function validarIdentCliente() {
   let identCliente = document.getElementById("ident_cliente").value;
   let errosIdentCliente = [];
 
   document.getElementById("errosIdentCliente").innerHTML = "";
 
-  if (identCliente === "") { 
+  if (identCliente === "") {
     errosIdentCliente.push("Você deve selecionar um dos clientes!");
-    document.getElementById("errosIdentCliente").innerHTML = errosIdentCliente.join("<br>");
+    document.getElementById("errosIdentCliente").innerHTML =
+      errosIdentCliente.join("<br>");
     return 1;
   }
 
@@ -254,50 +310,18 @@ function validarDadosCliente() {
 }
 
 function criarBanco() {
-  alasql("CREATE LOCALSTORAGE DATABASE IF NOT EXISTS argosqldb");
-  alasql("ATTACH LOCALSTORAGE DATABASE argosqldb AS argosql");
+  if (!alasql.databases['argosql']) {
+    alasql("CREATE LOCALSTORAGE DATABASE IF NOT EXISTS argosqldb");
+    alasql("ATTACH LOCALSTORAGE DATABASE argosqldb AS argosql");
+  }
+
   alasql("USE argosql");
-  alasql(
-    "CREATE TABLE IF NOT EXISTS cadastros_usuarios (nome_usuario STRING, senha STRING)"
-  );
 
-  if (alasql.tables.cadastros_usuarios) {
-    alasql("SELECT * FROM cadastros_usuarios");
-  }
+  alasql("CREATE TABLE IF NOT EXISTS cadastros_usuarios (nome_usuario STRING, senha STRING)");
 
-  alasql(
-    "CREATE TABLE IF NOT EXISTS cadastros_clientes (id INT, nome_completo STRING, data_nascimento DATE, telefone BIGINT, celular BIGINT, cpf BIGINT)"
-  );
+  alasql("CREATE TABLE IF NOT EXISTS cadastros_clientes (id INT, nome_completo STRING, data_nascimento DATE, telefone BIGINT, celular BIGINT, cpf BIGINT)");
 
-  if (alasql.tables.cadastros_clientes) {
-    alasql("SELECT * FROM cadastros_clientes");
-  }
-
-  alasql(
-    "CREATE TABLE IF NOT EXISTS cadastros_enderecos (id INT, cep BIGINT, rua STRING, bairro string, cidade string, estado string, pais string, cliente INT)"
-  );
-
-  if (alasql.tables.cadastros_enderecos) {
-    alasql("SELECT * FROM cadastros_enderecos");
-  }
-
-  //   alasql(`
-  //     INSERT INTO cadastros_enderecos (id, cep, rua, bairro, cidade, estado, pais, cliente) VALUES
-  //     (1, 12345678, 'Rua das Flores', 'Jardim Primavera', 'São Paulo', 'SP', 'Brasil', 1),
-  //     (2, 23456789, 'Avenida Central', 'Centro', 'Rio de Janeiro', 'RJ', 'Brasil', 2),
-  //     (3, 34567890, 'Rua do Sol', 'Bela Vista', 'Belo Horizonte', 'MG', 'Brasil', 3),
-  //     (4, 45678901, 'Travessa das Palmeiras', 'Boa Esperança', 'Curitiba', 'PR', 'Brasil', 4);
-  // `);
-
-  //   alasql((`
-  //     INSERT INTO cadastros_clientes (id, nome_completo, data_nascimento, telefone, celular, cpf)
-  //     VALUES
-  //     (1, 'João Silva', '1985-02-15', 1122334455, 11987654321, 12345678901),
-  //     (2, 'Maria Oliveira', '1990-07-25', 1133445566, 11976543210, 23456789012),
-  //     (3, 'Carlos Souza', '1982-11-30', 1144556677, 11865432109, 34567890123),
-  //     (4, 'Fernanda Lima', '1995-05-05', 1155667788, 11754321098, 45678901234),
-  //     (5, 'Roberto Pereira', '1978-08-12', 1166778899, 11643210987, 56789012345)
-  //   `));
+  alasql("CREATE TABLE IF NOT EXISTS cadastros_enderecos (id INT, cep BIGINT, rua STRING, bairro STRING, cidade STRING, estado STRING, pais STRING, cliente INT)");
 }
 
 function logar() {
