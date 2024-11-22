@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100" onload="carregarListaClientes()">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.php">Teste Agrosys</a>
@@ -49,44 +49,16 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Nome</th>
-                            <th scope="col">Sobrenome</th>
                             <th scope="col">CPF</th>
-                            <th scope="col">Idade</th>
-                            <th scope="col">Editar</th>
-                            <th scope="col">Deletar</th>
+                            <th scope="col">Data de Nascimento</th>
+                            <th scope="col">Telefone</th>
+                            <th scope="col">Celular</th>
+
                         </tr>
                     </thead>
+                    <tbody id="corpoListaClientes">
 
-                    <tbody>
-                        <tr>
-                            <th scope="row"></th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <a class="btn btn-warning btn-sm"
-                                    href="editar_cliente.php?id=<?php echo $dados['id'] ?>.php" role="button"><i
-                                        data-feather="edit"></i></a>
-                            </td>
-                            <td>
-                                <a class="btn btn-danger btn-sm"
-                                    href="banco_de_dados/delete_cliente.php?id=<?php echo $dados['id'] ?>"
-                                    role="button"><i data-feather="trash-2"></i></a>
-                            </td>
-                        </tr>
                     </tbody>
-
-
-                    <tr>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                    </tr>
                 </table>
 
                 <div class="container text-center">

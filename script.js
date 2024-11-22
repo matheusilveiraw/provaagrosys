@@ -1,5 +1,48 @@
 criarBanco();
 
+function carregarListaClientes() { 
+  const clientes = alasql("SELECT * FROM cadastros_clientes");
+  const corpoListaClientes = document.getElementById("corpoListaClientes");
+
+  corpoListaClientes.innerHTML = '';
+
+  console.log(clientes)
+
+  clientes.forEach(cliente => {
+      const tr = document.createElement('tr');
+
+      const tdId = document.createElement('td');
+      tdId.textContent = cliente.id;
+
+      const tdNome = document.createElement('td');
+      tdNome.textContent = cliente.nome_completo;
+
+      const tdCpf = document.createElement('td');
+      tdCpf.textContent = cliente.cpf;
+
+      const tdDataNascimento = document.createElement('td');
+      tdDataNascimento.textContent = cliente.data_nascimento;
+
+      const tdTelefone = document.createElement('td');
+      tdTelefone.textContent = cliente.telefone;
+
+      const tdCelular = document.createElement('td');
+      tdCelular.textContent = cliente.celular;
+
+      //basicamente criei os elementos aqui em cima e dei os valores
+      //abaixo eu crio eles dentro de um tr no html e depois eu boto todos dentro da tbody que to chamando de corpoListaClientes
+
+      tr.appendChild(tdId);
+      tr.appendChild(tdNome);
+      tr.appendChild(tdCpf);
+      tr.appendChild(tdDataNascimento);
+      tr.appendChild(tdTelefone);
+      tr.appendChild(tdCelular);
+
+      corpoListaClientes.appendChild(tr);
+  });
+}
+
 function cadastrarClienteBanco() {
   let nomeCompleto = document.getElementById("nomeCompleto").value;
   let cpf = document.getElementById("cpf").value;
@@ -12,8 +55,7 @@ function cadastrarClienteBanco() {
   alasql("INSERT INTO cadastros_clientes VALUES (?, ?, ?, ?, ?, ?)", [novoId, nomeCompleto, dataNascimento, telefone, celular, cpf]);
   
   window.location.href = "clientes.html";
-
-  }
+}
 
 function validarDadosCliente() {
   erros = 0;
