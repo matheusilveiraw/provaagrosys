@@ -44,35 +44,30 @@ function validarDadosEndereco() {
 
   if (erros == 0) {
     cadastrarEnderecoBanco();
-    console.log("deu great");
-  } else {
-    console.log("corrija os erros");
   }
 }
 
 function carregarListaEnderecos() {
-  // Busca os dados da tabela 'cadastros_enderecos'
   const enderecos = alasql("SELECT * FROM cadastros_enderecos");
   const corpoListaEnderecos = document.getElementById("corpoListaEnderecos");
 
-  // Limpa o conteúdo anterior do tbody
   corpoListaEnderecos.innerHTML = "";
 
-  console.log(enderecos);
-
-  // Itera sobre os endereços e cria as linhas dinamicamente
   enderecos.forEach((endereco) => {
     const tr = document.createElement("tr");
 
-    // Criando as células (td) e adicionando os valores
-    const tdId = document.createElement("td");
-    tdId.textContent = endereco.id;
+    // const tdId = document.createElement("td");
+    // tdId.textContent = endereco.id;
 
     const tdCep = document.createElement("td");
-    tdCep.textContent = endereco.cep;
+    cepFormatado = endereco.cep.toString().replace(/\D/g, '');
+    cepFormatado = cepFormatado.replace(/(\d{5})(\d{3})/, "$1-$2");
+    tdCep.textContent = cepFormatado;
+
 
     const tdRua = document.createElement("td");
     tdRua.textContent = endereco.rua;
+    tdRua.classList.add("d-none");
 
     const tdBairro = document.createElement("td");
     tdBairro.textContent = endereco.bairro;
@@ -85,12 +80,13 @@ function carregarListaEnderecos() {
 
     const tdPais = document.createElement("td");
     tdPais.textContent = endereco.pais;
+    tdPais.classList.add("d-none");
 
     const tdCliente = document.createElement("td");
     tdCliente.textContent = endereco.cliente;
 
-    // Adiciona as células na linha
-    tr.appendChild(tdId);
+
+    // tr.appendChild(tdId);
     tr.appendChild(tdCep);
     tr.appendChild(tdRua);
     tr.appendChild(tdBairro);
@@ -99,7 +95,6 @@ function carregarListaEnderecos() {
     tr.appendChild(tdPais);
     tr.appendChild(tdCliente);
 
-    // Adiciona a linha ao corpo da tabela
     corpoListaEnderecos.appendChild(tr);
   });
 }
@@ -283,7 +278,6 @@ function validarDadosParaCadastro() {
   erros += validarUsuarioCadastro();
   erros += validarSenhaCadastro();
   erros += validarConfirmaSenhaCadastro();
-  console.log("erros = " + erros);
 
   if (erros === 0) {
     cadastrarUsuario();
@@ -297,11 +291,7 @@ function cadastrarUsuario() {
   if (alasql.tables.cadastros_usuarios) {
     alasql("INSERT INTO cadastros_usuarios VALUES (?, ?)", [usuario, senha]);
 
-    console.log(alasql.tables.cadastros_usuarios.data);
-
     alert("Cadastro realizado com sucesso!");
-  } else {
-    console.error("Tabela 'cadastros_usuarios' não encontrada");
   }
 }
 
@@ -316,10 +306,7 @@ function validarUsuarioCadastro() {
 
   document.getElementById("errosUsuario").innerHTML = "";
 
-  if (buscaUsuarioBD.length === 0) {
-    console.log("O usuário não foi encontrado no banco de dados.");
-  } else {
-    console.log();
+  if (buscaUsuarioBD.length !== 0) {
     errosUsuario.push("Esse usuário já está sendo usado!");
   }
 
