@@ -18,7 +18,8 @@ function checarLogado() {
   if (
     !(
       window.location.pathname.includes("index.html") ||
-      window.location.pathname.includes("cadastro.html")
+      window.location.pathname.includes("cadastro.html") ||
+      window.location.pathname.includes("configuracoes.html")
     )
   ) {
     if (localStorage.getItem("usuarioLogado") == "false") {
@@ -211,28 +212,19 @@ function carregarListaEnderecos() {
     for (let j = 0; j < clientes.length; j++) {
       const e = clientes[j];
 
+      //id do endereço tem que ser igual ao id do lugar, aí a gente bota o id do cliente
+      //element.id = id do endereço 
+      //
       if (e.endereco_principal == element.id) {
-        tdCliente.textContent = element.id;
+        tdCliente.textContent = e.id;
       }
-    }
 
-    for (let index = 0; index < clientes.length; index++) {
-      const j = clientes[index];
+      if (e.endereco_alternativo1 == element.id) {
+        tdCliente.textContent = e.id;
+      }
 
-      if (j.enderecos_secundarios) {
-        const numeros = j.enderecos_secundarios.match(/\d+/g);
-
-        if (numeros) {
-          const numerosConvertidos = numeros.map(Number);
-
-          for (let index2 = 0; index2 < numerosConvertidos.length; index2++) {
-            const e = numerosConvertidos[index2];
-
-            if (e == element.id) {
-              tdCliente.textContent = element.id;
-            }
-          }
-        }
+      if (e.endereco_alternativo2 == element.id) {
+        tdCliente.textContent = e.id;
       }
     }
 
@@ -412,7 +404,7 @@ function validarDadosCliente() {
   erros += validarDadosSelectsEnderecos("enderecoAlternativo1");
   erros += validarDadosSelectsEnderecos("enderecoAlternativo2");
 
-  if (erros == 0) {
+  if (erros == 0 || isNaN(erros)) {
     cadastrarClienteBanco();
   }
 }
@@ -436,46 +428,6 @@ function criarBanco() {
   alasql(
     "CREATE TABLE IF NOT EXISTS cadastros_enderecos (id INT, cep BIGINT, rua STRING, bairro STRING, cidade STRING, estado STRING, pais STRING)"
   );
-
-  //   alasql(`
-  //     INSERT INTO cadastros_usuarios (nome_usuario, senha)
-  //     VALUES
-  //       ('usuario1', 'senha123'),
-  //       ('usuario2', 'senha456'),
-  //       ('usuario3', 'senha789'),
-  //       ('usuario4', 'senha101'),
-  //       ('usuario5', 'senha202');
-  //   `);
-
-  //   alasql(`
-  //   INSERT INTO cadastros_clientes (id, nome_completo, data_nascimento, telefone, celular, cpf, endereco_principal, endereco_alternativo1, endereco_alternativo2)
-  //   VALUES
-  //     (1, 'João da Silva', '1990-05-10', 1234567890, 9876543210, 12345678901, 1, 0, 0),
-  //     (2, 'Maria Oliveira', '1985-08-15', 1234567891, 9876543211, 12345678902, 2, 5, 0),
-  //     (3, 'Carlos Almeida', '1978-11-20', 1234567892, 9876543212, 12345678903, 3, 6, 7),
-  //     (4, 'Ana Souza', '1995-03-25', 1234567893, 9876543213, 12345678904, 4, 0, 0),
-  //     (5, 'Luiz Ferreira', '1980-07-30', 1234567894, 9876543214, 12345678905, 8, 9, 10)
-  // `);
-
-  //   alasql(`
-  //     INSERT INTO cadastros_enderecos (id, cep, rua, bairro, cidade, estado, pais)
-  //     VALUES
-  //       (1, 12345678, 'Rua das Flores', 'Jardim Primavera', 'São Paulo', 'SP', 'Brasil'),
-  //       (2, 23456789, 'Avenida Central', 'Centro', 'Rio de Janeiro', 'RJ', 'Brasil'),
-  //       (3, 34567890, 'Rua do Sol', 'Bela Vista', 'Belo Horizonte', 'MG', 'Brasil'),
-  //       (4, 45678901, 'Travessa das Palmeiras', 'Boa Esperança', 'Curitiba', 'PR', 'Brasil'),
-  //       (5, 78945612, '5555', '5555', '55', '5', '555'),
-  //       (6, 67890123, 'Rua das Acácias', 'Jardim das Palmeiras', 'Manaus', 'AM', 'Brasil'),
-  //       (7, 78901234, 'Avenida do Sol', 'Centro', 'Fortaleza', 'CE', 'Brasil'),
-  //       (8, 89012345, 'Rua do Horizonte', 'Vila Nova', 'Recife', 'PE', 'Brasil'),
-  //       (9, 90123456, 'Praça da Paz', 'Alto do Morro', 'Brasília', 'DF', 'Brasil'),
-  //       (10, 12309876, 'Rua das Magnólias', 'Bairro do Lago', 'Curitiba', 'PR', 'Brasil'),
-  //       (11, 23456789, 'Avenida das Nações', 'Vila Verde', 'Porto Alegre', 'RS', 'Brasil'),
-  //       (12, 34567890, 'Rua do Comércio', 'Centro Histórico', 'Salvador', 'BA', 'Brasil'),
-  //       (13, 45678901, 'Rua da Liberdade', 'Liberdade', 'São Paulo', 'SP', 'Brasil'),
-  //       (14, 56789012, 'Rua do Campo', 'Vila São José', 'Natal', 'RN', 'Brasil'),
-  //       (15, 67890123, 'Rua do Rio', 'Vila Mariana', 'Rio de Janeiro', 'RJ', 'Brasil');
-  //   `);
 }
 
 function logar() {
