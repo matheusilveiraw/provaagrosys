@@ -2,24 +2,48 @@ checarLogado();
 criarBanco();
 
 document.addEventListener("DOMContentLoaded", function () {
-  if (window.location.pathname.includes("cadastrar_enderecos.html")) {
-    //esse código aqui serve pra chamar apenas se estiver na página descrita
-    carregarClientes();
+  if (window.location.pathname.includes("cadastrar_cliente.html")) {
+    carregarEnderecos();
   }
 });
 
-function deslogarSistema() {
-    localStorage.setItem("usuarioLogado", false);
-    window.location.href = "index.html";
+function adcInputEndereco() {
+  const div = document.createElement("div");
+  div.classList.add("mt-1");
+
+  const inputEndereco = document.createElement("input");
+  inputEndereco.type = "number";
+  inputEndereco.classList.add("form-control");
+  inputEndereco.class = "endereco-secundario";
+  inputEndereco.placeholder = "Outros endereços";
+  inputEndereco.required = true;
+
+  const pErro = document.createElement("p");
+  pErro.classList.add("text-danger", "erro-fonte", "ml-1");
+  pErro.class = "errosEnderecoPrincipal";
+
+  div.appendChild(inputEndereco);
+  div.appendChild(pErro);
+
+  const container = document.getElementById("containerEnderecos");
+  container.appendChild(div);
 }
 
-function checarLogado() { 
-  if (!(window.location.pathname.includes("index.html") || window.location.pathname.includes("cadastro.html"))) {
-    console.log('teste 1');
-    if (localStorage.getItem('usuarioLogado') == 'false') {
-      console.log('teste 2');
-      alert('Você precisa logar no sistema!');
-      window.location.href = "index.html"; 
+function deslogarSistema() {
+  localStorage.setItem("usuarioLogado", false);
+  window.location.href = "index.html";
+}
+
+function checarLogado() {
+  if (
+    !(
+      window.location.pathname.includes("index.html") ||
+      window.location.pathname.includes("cadastro.html")
+    )
+  ) {
+    if (localStorage.getItem("usuarioLogado") == "false") {
+      alert("Você precisa logar no sistema!");
+      window.location.href = "index.html";
     }
   }
 }
@@ -49,19 +73,19 @@ function importarBanco() {
       const dados = JSON.parse(evento.target.result);
 
       if (dados.cadastros_usuarios) {
-        dados.cadastros_usuarios.forEach(usuario => {
+        dados.cadastros_usuarios.forEach((usuario) => {
           alasql("INSERT INTO cadastros_usuarios VALUES ?", [usuario]);
         });
       }
 
       if (dados.cadastros_clientes) {
-        dados.cadastros_clientes.forEach(cliente => {
+        dados.cadastros_clientes.forEach((cliente) => {
           alasql("INSERT INTO cadastros_clientes VALUES ?", [cliente]);
         });
       }
 
       if (dados.cadastros_enderecos) {
-        dados.cadastros_enderecos.forEach(endereco => {
+        dados.cadastros_enderecos.forEach((endereco) => {
           alasql("INSERT INTO cadastros_enderecos VALUES ?", [endereco]);
         });
       }
@@ -100,42 +124,45 @@ function exportarBancoJSON() {
   link.click();
 }
 
-function validarIdentCliente() {
-  let identCliente = document.getElementById("ident_cliente").value;
-  let errosIdentCliente = [];
+// function validarIdentCliente() {
+//   let identCliente = document.getElementById("ident_cliente").value;
+//   let errosIdentCliente = [];
 
-  document.getElementById("errosIdentCliente").innerHTML = "";
+//   document.getElementById("errosIdentCliente").innerHTML = "";
 
-  if (identCliente === "") {
-    errosIdentCliente.push("Você deve selecionar um dos clientes!");
-    document.getElementById("errosIdentCliente").innerHTML =
-      errosIdentCliente.join("<br>");
-    return 1;
-  }
+//   if (identCliente === "") {
+//     errosIdentCliente.push("Você deve selecionar um dos clientes!");
+//     document.getElementById("errosIdentCliente").innerHTML =
+//       errosIdentCliente.join("<br>");
+//     return 1;
+//   }
 
-  return 0;
-}
+//   return 0;
+// }
 
-function carregarClientes() {
-  const clientes = alasql("SELECT id, nome_completo FROM cadastros_clientes");
-  const selectCliente = document.getElementById("ident_cliente");
+function carregarEnderecos() {
+  const enderecos = alasql(
+    "SELECT id, rua, bairro, cidade FROM cadastros_enderecos"
+  );
 
-  selectCliente.innerHTML =
-    '<option value="" disabled selected>Selecione um cliente</option>';
+  const enderecoPrincipal = document.getElementById("enderecoPrincipal");
 
-  if (clientes.length > 0) {
-    clientes.forEach((cliente) => {
+  enderecoPrincipal.innerHTML =
+    '<option value="" disabled selected>Selecione seu endereço principal</option>';
+
+  if (enderecos.length > 0) {
+    enderecos.forEach((endereco) => {
       const option = document.createElement("option");
-      option.value = cliente.id;
-      option.textContent = cliente.nome_completo;
-      //importante aqui que ele mostra o nome no campo mas pega o id para o banco
-      selectCliente.appendChild(option);
+      option.value = endereco.id;
+      option.textContent =
+        endereco.rua + ", " + endereco.bairro + ", " + endereco.cidade;
+      enderecoPrincipal.appendChild(option);
     });
   } else {
     const option = document.createElement("option");
     option.disabled = true;
-    option.textContent = "Nenhum cliente encontrado";
-    selectCliente.appendChild(option);
+    option.textContent = "Nenhum Endereco encontrado";
+    enderecoPrincipal.appendChild(option);
   }
 }
 
@@ -146,7 +173,7 @@ function cadastrarEnderecoBanco() {
   let cidade = document.getElementById("cidade").value;
   let estado = document.getElementById("estado").value;
   let pais = document.getElementById("pais").value;
-  let clienteId = document.getElementById("ident_cliente").value;
+  // let clienteId = document.getElementById("ident_cliente").value;
 
   const buscaIdsEnderecos = alasql("SELECT id FROM cadastros_enderecos");
   let novoEnderecoId =
@@ -162,7 +189,6 @@ function cadastrarEnderecoBanco() {
     cidade,
     estado,
     pais,
-    clienteId,
   ]);
 
   window.location.href = "enderecos.html";
@@ -177,7 +203,6 @@ function validarDadosEndereco() {
   erros += validarCidade();
   erros += validarEstado();
   erros += validarPais();
-  erros += validarIdentCliente();
 
   if (erros == 0) {
     cadastrarEnderecoBanco();
@@ -311,6 +336,61 @@ function cadastrarClienteBanco() {
   window.location.href = "clientes.html";
 }
 
+function validarDadosEnderecoPrincipal() {
+  let enderecoPrincipal = parseInt(document.getElementById("enderecoPrincipal").value);
+  let errosEnderecoPrincipal = [];
+  const enderecosPrincipaisEmUso = alasql("select endereco_princiapl FROM cadastros_clientes");
+  const enderecosSecundariosEmUso = alasql("select enderecos_secundarios FROM cadastros_clientes");
+
+  document.getElementById("errosEnderecoPrincipal").innerHTML = "";
+
+  if (enderecoPrincipal === "") {
+    errosEnderecoPrincipal.push("Você deve selecionar um dos clientes!");
+    document.getElementById("errosEnderecoPrincipal").innerHTML =
+      errosEnderecoPrincipal.join("<br>");
+    return 1;
+  }
+
+  for (let index = 0; index < enderecosPrincipaisEmUso.length; index++) {
+    const element = enderecosPrincipaisEmUso[index];
+    
+    if(element.endereco_princiapl == enderecoPrincipal) { 
+      errosEnderecoPrincipal.push("Esse endereço já está em uso!");
+      document.getElementById("errosEnderecoPrincipal").innerHTML =
+        errosEnderecoPrincipal.join("<br>");
+      return 1;
+    }
+  }
+
+  //código acima compara com todos códigos principais
+
+  for (let index = 0; index < enderecosSecundariosEmUso.length; index++) {
+    const element = enderecosSecundariosEmUso[index];
+
+    const numeros = element.enderecos_secundarios.match(/\d+/g); 
+    
+    if (numeros) {
+      const numerosConvertidos = numeros.map(Number);
+
+      for (let index2 = 0; index2 < numerosConvertidos.length; index2++) {
+        const e = numerosConvertidos[index2];
+
+        if(e == enderecoPrincipal) { 
+          errosEnderecoPrincipal.push("Esse endereço já está em uso!");
+          document.getElementById("errosEnderecoPrincipal").innerHTML =
+            errosEnderecoPrincipal.join("<br>");
+          return 1;
+        }        
+      }
+    }
+
+    //aqui os valores secundarios são pegos json pelo banco, aí tem que converter e como pode ter mais de um 
+    //tem que fazer um for para rodar os números secundarios e um for neles para rodar os valores dos secundarios dentro
+    //das arrays que eles estão 
+  }
+  return 0;
+}
+
 function validarDadosCliente() {
   erros = 0;
 
@@ -319,6 +399,7 @@ function validarDadosCliente() {
   erros += validarDataNascimento();
   erros += validarTelefone();
   erros += validarCelular();
+  erros += validarDadosEnderecoPrincipal();
 
   if (erros == 0) {
     cadastrarClienteBanco();
@@ -326,18 +407,64 @@ function validarDadosCliente() {
 }
 
 function criarBanco() {
-  if (!alasql.databases['argosql']) {
+  if (!alasql.databases["argosql"]) {
     alasql("CREATE LOCALSTORAGE DATABASE IF NOT EXISTS argosqldb");
     alasql("ATTACH LOCALSTORAGE DATABASE argosqldb AS argosql");
   }
 
   alasql("USE argosql");
 
-  alasql("CREATE TABLE IF NOT EXISTS cadastros_usuarios (nome_usuario STRING, senha STRING)");
+  alasql(
+    "CREATE TABLE IF NOT EXISTS cadastros_usuarios (nome_usuario STRING, senha STRING)"
+  );
 
-  alasql("CREATE TABLE IF NOT EXISTS cadastros_clientes (id INT, nome_completo STRING, data_nascimento DATE, telefone BIGINT, celular BIGINT, cpf BIGINT)");
+  alasql(
+    "CREATE TABLE IF NOT EXISTS cadastros_clientes (id INT, nome_completo STRING, data_nascimento DATE, telefone BIGINT, celular BIGINT, cpf BIGINT, endereco_princiapl INT, enderecos_secundarios TEXT)"
+  );
 
-  alasql("CREATE TABLE IF NOT EXISTS cadastros_enderecos (id INT, cep BIGINT, rua STRING, bairro STRING, cidade STRING, estado STRING, pais STRING, cliente INT)");
+  alasql(
+    "CREATE TABLE IF NOT EXISTS cadastros_enderecos (id INT, cep BIGINT, rua STRING, bairro STRING, cidade STRING, estado STRING, pais STRING)"
+  );
+
+  // alasql(`
+  //   INSERT INTO cadastros_usuarios (nome_usuario, senha)
+  //   VALUES 
+  //     ('usuario1', 'senha123'),
+  //     ('usuario2', 'senha456'),
+  //     ('usuario3', 'senha789'),
+  //     ('usuario4', 'senha101'),
+  //     ('usuario5', 'senha202');
+  // `);
+
+  // alasql(`
+  //   INSERT INTO cadastros_clientes (id, nome_completo, data_nascimento, telefone, celular, cpf, endereco_princiapl, enderecos_secundarios)
+  //   VALUES 
+  //     (1, 'João Silva', '1985-02-15', 1122334455, 11987654321, 12345678901, 1, '[2, 3]'),
+  //     (2, 'Maria Oliveira', '1990-07-25', 1133445566, 11976543210, 23456789012, 4, '[5]'),
+  //     (3, 'Carlos Souza', '1982-11-30', 1144556677, 11865432109, 34567890123, 6, '[7, 8]'),
+  //     (4, 'Fernanda Lima', '1995-05-05', 1155667788, 11754321098, 45678901234, 9, '[10, 11]'),
+  //     (5, 'Roberto Pereira', '1978-08-12', 1166778899, 11643210987, 56789012345, 12, '[13, 14, 15]');
+  // `);
+
+  // alasql(`
+  //   INSERT INTO cadastros_enderecos (id, cep, rua, bairro, cidade, estado, pais)
+  //   VALUES 
+  //     (1, 12345678, 'Rua das Flores', 'Jardim Primavera', 'São Paulo', 'SP', 'Brasil'),
+  //     (2, 23456789, 'Avenida Central', 'Centro', 'Rio de Janeiro', 'RJ', 'Brasil'),
+  //     (3, 34567890, 'Rua do Sol', 'Bela Vista', 'Belo Horizonte', 'MG', 'Brasil'),
+  //     (4, 45678901, 'Travessa das Palmeiras', 'Boa Esperança', 'Curitiba', 'PR', 'Brasil'),
+  //     (5, 78945612, '5555', '5555', '55', '5', '555'),
+  //     (6, 67890123, 'Rua das Acácias', 'Jardim das Palmeiras', 'Manaus', 'AM', 'Brasil'),
+  //     (7, 78901234, 'Avenida do Sol', 'Centro', 'Fortaleza', 'CE', 'Brasil'),
+  //     (8, 89012345, 'Rua do Horizonte', 'Vila Nova', 'Recife', 'PE', 'Brasil'),
+  //     (9, 90123456, 'Praça da Paz', 'Alto do Morro', 'Brasília', 'DF', 'Brasil'),
+  //     (10, 12309876, 'Rua das Magnólias', 'Bairro do Lago', 'Curitiba', 'PR', 'Brasil'),
+  //     (11, 23456789, 'Avenida das Nações', 'Vila Verde', 'Porto Alegre', 'RS', 'Brasil'),
+  //     (12, 34567890, 'Rua do Comércio', 'Centro Histórico', 'Salvador', 'BA', 'Brasil'),
+  //     (13, 45678901, 'Rua da Liberdade', 'Liberdade', 'São Paulo', 'SP', 'Brasil'),
+  //     (14, 56789012, 'Rua do Campo', 'Vila São José', 'Natal', 'RN', 'Brasil'),
+  //     (15, 67890123, 'Rua do Rio', 'Vila Mariana', 'Rio de Janeiro', 'RJ', 'Brasil');
+  // `);
 }
 
 function logar() {

@@ -87,8 +87,31 @@
                         </p>
                     </div>
 
-                    <div class="text-center mt-1 mb-0">
-                        <button type="button" class="btn btn-success btn-lg col-12" onclick="validarDadosCliente()">Cadastrar cliente</button>
+                    <div class="mt-1">
+                        <select class="form-control" id="enderecoPrincipal" placeholder="Endereço Principal" required>
+
+                        </select>
+
+                        <p class="text-danger erro-fonte ml-1" id="errosEnderecoPrincipal">
+
+                        </p>
+                    </div>
+
+                    <div class="text-center mb-2">
+                        <button type="button" class="btn btn-info" id="btnAdicionarEndereco"
+                            onclick="adcInputEndereco()">
+                            Adicionar Endereço
+                        </button>
+                    </div>
+
+
+                    <div id="containerEnderecos">
+
+                    </div>
+
+                    <div class="text-center mt-1 mb-3">
+                        <button type="button" class="btn btn-success btn-lg col-12"
+                            onclick="validarDadosCliente()">Cadastrar cliente</button>
                     </div>
                 </form>
             </div>
